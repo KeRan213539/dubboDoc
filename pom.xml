@@ -69,6 +69,7 @@
         <commons-io.version>2.6</commons-io.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <commons-collections.version>4.2</commons-collections.version>
+        <disruptor.version>3.4.2</disruptor.version>
     </properties>
     
     <dependencyManagement>
@@ -94,8 +95,12 @@
                 <version>${internal-libs.version}</version>
             </dependency>
 
-
-
+            <!-- log4j 2 的异步日志依赖包 -->
+            <dependency>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${disruptor.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.alibaba.nacos</groupId>

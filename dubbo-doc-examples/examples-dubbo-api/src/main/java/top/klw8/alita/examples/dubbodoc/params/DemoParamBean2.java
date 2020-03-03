@@ -2,7 +2,6 @@ package top.klw8.alita.examples.dubbodoc.params;
 
 import lombok.Getter;
 import lombok.Setter;
-import top.klw8.alita.dubbodoc.annotations.RequestBean;
 import top.klw8.alita.dubbodoc.annotations.RequestParam;
 
 /**
@@ -13,7 +12,6 @@ import top.klw8.alita.dubbodoc.annotations.RequestParam;
  */
 @Getter
 @Setter
-@RequestBean
 public class DemoParamBean2 {
 
     @RequestParam("姓名2")

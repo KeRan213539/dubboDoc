@@ -2,8 +2,10 @@ package top.klw8.alita.examples.dubbodoc.params;
 
 import lombok.Getter;
 import lombok.Setter;
-import top.klw8.alita.dubbodoc.annotations.RequestBean;
 import top.klw8.alita.dubbodoc.annotations.RequestParam;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author klw(213539 @ qq.com)
@@ -13,7 +15,6 @@ import top.klw8.alita.dubbodoc.annotations.RequestParam;
  */
 @Getter
 @Setter
-@RequestBean
 public class DemoParamBean1 {
 
     @RequestParam("姓名")
@@ -23,5 +24,25 @@ public class DemoParamBean1 {
     private Integer age;
 
     private Boolean man;
+
+    @RequestParam("====subBean")
+    private List<DemoParamBean1SubBean1> subBean;
+
+    @RequestParam("Map")
+    private Map<String, DemoParamBean1SubBean1> subBean2;
+
+    @RequestParam("Map")
+    private Map<DemoParamBean1SubBean1, DemoParamBean1SubBean1> subMap2;
+
+    @RequestParam("数组")
+    private String[] strArray;
+
+    @RequestParam("数组2")
+    private DemoParamBean1SubBean1[] strArray2;
+
+    @RequestParam("测试个枚举")
+    private TestEnum testEnum;
+
+    private DemoParamBean1SubBean1 subBean3;
 
 }

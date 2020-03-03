@@ -75,19 +75,35 @@ public class DubboUtil {
      * @return org.apache.dubbo.config.ReferenceConfig<org.apache.dubbo.rpc.service.GenericService>
      */
     private static ReferenceConfig<GenericService> getReferenceConfig(String address, String interfaceName) {
-        ReferenceConfig<GenericService> referenceConfig = referenceCache.get(interfaceName);
+        ReferenceConfig<GenericService> referenceConfig = referenceCache.get(address + "/" + interfaceName);
         if (null == referenceConfig) {
             referenceConfig = new ReferenceConfig<>();
             referenceConfig.setApplication(application);
-            referenceConfig.setRegistry(getRegistryConfig(address));
+            if(address.startsWith("dubbo")){
+                referenceConfig.setUrl(address);
+            } else {
+                referenceConfig.setRegistry(getRegistryConfig(address));
+            }
             referenceConfig.setInterface(interfaceName);
             // 声明为泛化接口
             referenceConfig.setGeneric(true);
-            referenceCache.put(interfaceName, referenceConfig);
+            referenceCache.put(address + "/" + interfaceName, referenceConfig);
         }
         return referenceConfig;
     }
 
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 调用duboo提供者,返回 CompletableFuture
+     * @Date 2020/3/1 14:55
+     * @param: address
+     * @param: interfaceName
+     * @param: methodName
+     * @param: async  提供者是否异步, 是就直接返回提供者返回的 CompletableFuture, 不是就包装为 CompletableFuture
+     * @param: prarmTypes
+     * @param: prarmValues
+     * @return java.util.concurrent.CompletableFuture<java.lang.Object>
+     */
     public static CompletableFuture<Object> invoke(String address, String interfaceName,
                                                   String methodName, boolean async, String[] prarmTypes,
                                                   Object[] prarmValues) {
@@ -104,6 +120,30 @@ public class DubboUtil {
             }
         }
         return future;
+    }
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 同步调用提供者, 提供者提供的必须是同步的接口
+     * @Date 2020/3/1 14:58
+     * @param: address
+     * @param: interfaceName
+     * @param: methodName
+     * @param: prarmTypes
+     * @param: prarmValues
+     * @return java.lang.Object
+     */
+    public static Object invokeSync(String address, String interfaceName,
+                                                   String methodName, String[] prarmTypes,
+                                                   Object[] prarmValues) {
+        ReferenceConfig<GenericService> reference = getReferenceConfig(address, interfaceName);
+        if (null != reference) {
+            GenericService genericService = reference.get();
+            if (null != genericService) {
+                return genericService.$invoke(methodName, prarmTypes, prarmValues);
+            }
+        }
+        return null;
     }
 
 }

@@ -19,4 +19,7 @@ public class DemoRespBean1 {
     @ResponseProperty("返回消息")
     private String message;
 
+    @ResponseProperty(value = "返回消息2", example = "这是返回消息2")
+    private String message2;
+
 }

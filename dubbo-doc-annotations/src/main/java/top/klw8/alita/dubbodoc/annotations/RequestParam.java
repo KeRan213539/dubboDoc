@@ -41,10 +41,10 @@ public @interface RequestParam {
     /**
      * @author klw(213539@qq.com)
      * @Description: 允许的值,设置该属性后界面上将对参数生成下拉列表 <br />
-     * 注:<br />
+     * 注:使用该属性后将生成下拉选择框<br />
      * 1. boolean 类型的参数不用设置该属性,将默认生成 true/false 的下拉列表<br />
      * 2. 枚举类型的参数会自动生成下拉列表,如果不想开放全部的枚举值,可以单独设置此属性.
      */
-    String[] allowableValues() default "";
+    String[] allowableValues() default {};
 
 }

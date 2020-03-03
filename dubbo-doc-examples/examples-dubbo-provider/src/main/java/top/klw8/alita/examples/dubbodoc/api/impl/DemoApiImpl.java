@@ -18,12 +18,12 @@ import top.klw8.alita.examples.dubbodoc.params.DemoRespBean1;
  */
 @Slf4j
 @Service(async=true)
-@DubboApiModule("demo")
+@DubboApiModule(value = "demo", apiInterface = IDemoApi.class)
 public class DemoApiImpl implements IDemoApi {
 
     @DubboApi("入参出参都是bean")
     @Override
-    public DemoRespBean1 demoApi1(@RequestParam("参数Bean 1") DemoParamBean1 param1, DemoParamBean2 param2) {
+    public DemoRespBean1 demoApi1(DemoParamBean1 param1, DemoParamBean2 param2) {
         log.info(" called demoApi1");
         return null;
     }

@@ -21,6 +21,12 @@ public @interface DubboApiModule {
 
     /**
      * @author klw(213539@qq.com)
+     * @Description: dubbo api 的接口类
+     */
+    Class<?> apiInterface();
+
+    /**
+     * @author klw(213539@qq.com)
      * @Description: 版本
      */
     String version() default "";
