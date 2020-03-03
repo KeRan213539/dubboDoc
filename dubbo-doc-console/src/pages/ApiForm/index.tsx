@@ -142,7 +142,7 @@ class ApiForm extends React.Component {
           formItem.set("allowableValues", paramItem.allowableValues);
           formsArray.push(formItem);
         } else {
-          // 没有 htmlType, 说明是个对象
+          // 没有 htmlType, 说明是个对象dd
           var prarmInfoArray = paramItem.prarmInfo;
           for(var j = 0; j < prarmInfoArray.length; j++){
             var prarmInfoItem = prarmInfoArray[j];
