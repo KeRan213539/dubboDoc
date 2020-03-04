@@ -6,6 +6,7 @@ import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ProtocolConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.config.ServiceConfig;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
@@ -61,6 +62,12 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
 //                    + apiModule.getClass().getAnnotation(DubboApiModule.class).value()
 //                    + "【" + apiModule.getClass().getCanonicalName() + "】");
             DubboApiModule moduleAnn = apiModule.getClass().getAnnotation(DubboApiModule.class);
+            if(!apiModule.getClass().isAnnotationPresent(Service.class)){
+                log.warn("【警告】{}使用了 @DubboApiModule 注解,但是它不是一个Dubbo提供者(没有使用{}注解)", apiModule.getClass().getName(), Service.class.getName());
+                return;
+            }
+            Service dubboService = apiModule.getClass().getAnnotation(Service.class);
+            boolean async = dubboService.async();
             Map<String, Object> moduleCacheItem = new HashMap<>(4);
             DubboDocCache.addApiModule(moduleAnn.apiInterface().getCanonicalName(), moduleCacheItem);
             //模块中文名称
@@ -98,7 +105,9 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
 
                     Class<?>[] argsClass = method.getParameterTypes();
                     Annotation[][] argsAnns = method.getParameterAnnotations();
+                    Parameter[] parameters = method.getParameters();
                     List<Map<String, Object>> paramList = new ArrayList<>(argsClass.length);
+                    apiParamsAndResp.put("async", async);
                     apiParamsAndResp.put("params", paramList);
                     apiParamsAndResp.put("response", ClassTypeUtils.calss2Json(null, method.getReturnType()));
                     for(int i = 0; i < argsClass.length; i++){
@@ -125,9 +134,12 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
                             }
                         } else {
                             // 是基本类型
+                            Parameter methodParameter = parameters[i];
+                            prarmListItem.put("name", methodParameter.getName());
                             prarmListItem.put("htmlType", paramBean.getHtmlType().name());
                             prarmListItem.put("allowableValues", paramBean.getAllowableValues());
                             if(requestParam != null) {
+
                                 // 处理参数上的 RequestParam 注解
                                 prarmListItem.put("nameCh", requestParam.value());
                                 prarmListItem.put("description", requestParam.description());

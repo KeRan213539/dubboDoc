@@ -31,9 +31,6 @@ public class DemoParamBean1 {
     @RequestParam("Map")
     private Map<String, DemoParamBean1SubBean1> subBean2;
 
-    @RequestParam("Map")
-    private Map<DemoParamBean1SubBean1, DemoParamBean1SubBean1> subMap2;
-
     @RequestParam("数组")
     private String[] strArray;
 

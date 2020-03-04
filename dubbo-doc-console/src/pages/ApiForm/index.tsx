@@ -3,7 +3,7 @@ import { request } from 'ice';
 import {
   Button,
   Dialog,
-  Field,
+  NumberPicker,
   Form,
   Input,
   Loading,
@@ -82,87 +82,87 @@ class ApiForm extends React.Component {
     );
   }
 
-  test(){
-    var testInputs = $('.testInputClass input');
-    testInputs.each((index, element) => {
-      console.log(element.id);
-    });
-    
-  }
-
-  buildInputText(){
-    return (
-      <Input
-        id={'textId1'}
-        htmlType={'text'}
-        className="testInputClass"
-        style={{ marginLeft: 5, width: 200 }}
-        placeholder={'xxxxx'}
-        data-test="123"
-      />
-    );
-  }
-
-  buildFormItem(itemType){
-    switch (itemType) {
-      case 'text':
-        return this.buildInputText();
-        break;
-      default:
-        return this.buildInputText();
-        break;
-    }
-  }
-
   loadApiInfoAndBuildForm(){
     if(!this.state.loading){
-      var objArray = new Array();
-      var item1 = "text";
-      objArray.push(item1);
-      var item2 = "text";
-      objArray.push(item2);
-
-
       var apiInfoData = this.state.apiInfoData;
       var params = apiInfoData.params;
       var formsArray = new Array();
       for(var i = 0; i < params.length; i++){
         var paramItem = params[i];
-        var formItem = new Map();
         if(paramItem.htmlType){
           // 有 htmlType ,说明是个基础类型
-          formItem.set("htmlType", paramItem.htmlType);
-          formItem.set("paramType", paramItem.prarmType);
-          formItem.set("javaType", paramItem.prarmType);
-          formItem.set("paramIndex", paramItem.prarmIndex);
-          formItem.set("nameCh", paramItem.nameCh);
-          formItem.set("description", paramItem.description);
-          formItem.set("example", paramItem.example);
-          formItem.set("defaultValue", paramItem.defaultValue);
-          formItem.set("allowableValues", paramItem.allowableValues);
+          var formItem = new Map();
+          formItem.set('name', paramItem.name);
+          formItem.set('htmlType', paramItem.htmlType);
+          formItem.set('paramType', paramItem.prarmType);
+          formItem.set('javaType', paramItem.prarmType);
+          formItem.set('paramIndex', paramItem.prarmIndex);
+          formItem.set('nameCh', paramItem.nameCh);
+          formItem.set('description', paramItem.description);
+          formItem.set('example', paramItem.example);
+          formItem.set('defaultValue', paramItem.defaultValue);
+          formItem.set('allowableValues', paramItem.allowableValues);
           formsArray.push(formItem);
         } else {
-          // 没有 htmlType, 说明是个对象dd
+          // 没有 htmlType, 说明是个对象
           var prarmInfoArray = paramItem.prarmInfo;
           for(var j = 0; j < prarmInfoArray.length; j++){
             var prarmInfoItem = prarmInfoArray[j];
+            var formItem = new Map();
+            formItem.set('name', prarmInfoItem.name);
+            formItem.set('htmlType', prarmInfoItem.htmlType);
+            formItem.set('paramType', paramItem.prarmType);
+            formItem.set('javaType', prarmInfoItem.javaType);
+            formItem.set('paramIndex', paramItem.prarmIndex);
+            formItem.set('nameCh', prarmInfoItem.nameCh);
+            formItem.set('description', prarmInfoItem.description);
+            formItem.set('example', prarmInfoItem.example);
+            formItem.set('defaultValue', prarmInfoItem.defaultValue);
+            formItem.set('allowableValues', prarmInfoItem.allowableValues);
+            formItem.set('subParamsJson', prarmInfoItem.subParamsJson);
+            formsArray.push(formItem);
           }
         }
       }
-
       return(
         <Form>
+          <Form.Item
+            key=''
+            label=''>
+              
+            </Form.Item>
           {
-            objArray.map((item, index) => {
+            formsArray.map((item, index) => {
               return (
-                <Form.Item key={'xxx' + index} label={'xxx' + index}>
-                  {
-                    this.buildFormItem(item)
-                  }
+                <Form.Item
+                key={'formItem' + index}
+                label={'Name: ' + item.get('name')}>
+                  <div style={{ width: '1000px', height:'200px' }}>
+                    <div style={{ float: 'left', border: '2px solid #cccccc', 
+                          width: '300px', height: '100%', padding: '5px' }}>
+                      Description:<br />
+                      {item.get('description')}
+                    </div>
+                    <div style={{float: "left"}}>
+                      <div style={{padding: '5px'}}>{item.get('nameCh')}</div>
+                      <div>
+                      {
+                        this.buildFormItem(item)
+                      }
+                      </div>
+                    </div>
+                  </div>
                 </Form.Item>
               )
             })
           }
+          <Button
+            type={'primary'}
+            style={{ marginLeft: 10, width: '600px' }}
+            onClick={ this.doTestApi }
+          >
+            测试
+          </Button>
         </Form>
       );
     } else {
@@ -173,6 +173,127 @@ class ApiForm extends React.Component {
     
   }
 
+  doTestApi(){
+    var testInputs = $('.dubbo-doc-form-item-class input');
+    testInputs.each((index, element) => {
+      console.log(element.id);
+    });
+  }
+
+  buildInputText(item){
+    return (
+      <Input
+        id={item.get('paramType') + '@@' + item.get('paramIndex') + '@@' + item.get('javaType')}
+        htmlType={'text'}
+        name={item.get('name')}
+        className={'dubbo-doc-form-item-class'}
+        style={{ marginLeft: 5, width: 400 }}
+        placeholder={item.get('example')}
+        defaultValue={item.get('defaultValue')}
+        trim={true}
+      />
+    );
+  }
+
+  buildNumberInteger(item){
+    return (
+      <NumberPicker
+        id={item.get('paramType') + '@@' + item.get('paramIndex') + '@@' + item.get('javaType')}
+        name={item.get('name')}
+        className={'dubbo-doc-form-item-class'}
+        style={{ marginLeft: 5, width: 400 }}
+        placeholder={item.get('example')}
+        defaultValue={item.get('defaultValue') - 0}
+        type='inline'
+      />
+    );
+  }
+
+  buildNumberDecimal(item){
+    return (
+      <NumberPicker
+        id={item.get('paramType') + '@@' + item.get('paramIndex') + '@@' + item.get('javaType')}
+        name={item.get('name')}
+        className={'dubbo-doc-form-item-class'}
+        style={{ marginLeft: 5, width: 400 }}
+        placeholder={item.get('example')}
+        defaultValue={item.get('defaultValue') - 0}
+        type='inline'
+        precision={20}
+      />
+    );
+  }
+
+  buildTestArea(item){
+    return (
+      <Input.TextArea
+        id={item.get('paramType') + '@@' + item.get('paramIndex') + '@@' + item.get('javaType')}
+        name={item.get('name')}
+        className={'dubbo-doc-form-item-class'}
+        style={{ marginLeft: 5, width: '600px' }}
+        placeholder={item.get('example')}
+        defaultValue={JSON.stringify(JSON.parse(item.get('subParamsJson')), null, 4)}
+        trim={true}
+        rows={10}
+      />
+    );
+  }
+
+  buildSelect(item){
+    var allowableValues = item.get('allowableValues');
+    const dataSource = new Array();
+    for(var i = 0; i < allowableValues.length; i++){
+      var valueItem = allowableValues[i];
+      var dsItem = {};
+      dsItem.label=valueItem;
+      dsItem.value=valueItem;
+      dataSource.push(dsItem);
+    }
+    return (
+      <Select 
+        id={item.get('paramType') + '@@' + item.get('paramIndex') + '@@' + item.get('javaType')}
+        name={item.get('name')}
+        className={'dubbo-doc-form-item-class'}
+        style={{ marginLeft: 5, width: '200px' }}
+        dataSource={dataSource}
+      />
+    );
+  }
+
+  buildFormItem(item){
+    // 把dubbo的 接口类名和方法名拆出来,放到 state里面
+    // TODO 加几个不可编辑并有默认值的input,到时候直接取: 接口类名, 接口方法名, 是否异步(从接口返回中取)
+    // 加个注册中心地址的input,默认空:  注册中心地址,如: nacos://127.0.0.1:8848, 如果为空将使用Dubbo 提供者Ip和端口进行直连
+    // 考虑把什么东西放到Input 的id里, 其他的属性参数重设(从item里面取)
+    // 从表单取东西来拼参数
+    switch (item.get('htmlType')) {
+      case 'TEXT':
+        return this.buildInputText(item);
+        break;
+      case 'TEXT_BYTE':
+        return this.buildInputText(item);
+        break;
+      case 'TEXT_CHAR':
+        return this.buildInputText(item);
+        break;
+      case 'NUMBER_INTEGER':
+        return this.buildNumberInteger(item);
+        break;  
+      case 'NUMBER_DECIMAL':
+        return this.buildNumberDecimal(item);
+        break;
+      case 'SELECT':
+        return this.buildSelect(item);
+        break;
+      case 'TEXT_AREA':
+        return this.buildTestArea(item);
+        break;
+      default:
+        return (<span>未知类型</span>);
+        break;
+    }
+  }
+
 
   render() {
 
@@ -180,32 +301,6 @@ class ApiForm extends React.Component {
       <div>
         <div>
           <h1>接口名称: {this.showApiName()}</h1>
-        </div>
-        <div>
-          <Input
-          id={'textId1'}
-          htmlType={'text'}
-          className="testInputClass"
-          style={{ marginLeft: 5, width: 200 }}
-          placeholder={'127.0.0.1'}
-          data-test="123"
-          />
-          <Input
-          id={'textId2'}
-          htmlType={'text'}
-          className="testInputClass"
-          style={{ marginLeft: 5, width: 200 }}
-          placeholder={'127.0.0.1'}
-          data-test="456"
-          />
-          <Button
-            type={'primary'}
-            style={{ marginLeft: 10 }}
-            onClick={ this.test }
-          >
-            加载接口列表
-          </Button>
-
         </div>
         <Loading
           shape={'flower'}
