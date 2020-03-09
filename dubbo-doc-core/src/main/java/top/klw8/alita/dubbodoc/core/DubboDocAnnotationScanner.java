@@ -108,6 +108,11 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
                     Parameter[] parameters = method.getParameters();
                     List<Map<String, Object>> paramList = new ArrayList<>(argsClass.length);
                     apiParamsAndResp.put("async", async);
+                    apiParamsAndResp.put("apiName", method.getName());
+                    apiParamsAndResp.put("apiChName", dubboApi.value());
+                    apiParamsAndResp.put("apiVersion", dubboApi.version());
+                    apiParamsAndResp.put("apiRespDec", dubboApi.responseClassDescription());
+                    apiParamsAndResp.put("apiModelClass", moduleCacheItem.get("moduleClassName"));
                     apiParamsAndResp.put("params", paramList);
                     apiParamsAndResp.put("response", ClassTypeUtils.calss2Json(null, method.getReturnType()));
                     for(int i = 0; i < argsClass.length; i++){

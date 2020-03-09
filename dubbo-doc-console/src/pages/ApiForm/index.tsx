@@ -23,6 +23,8 @@ class ApiForm extends React.Component {
       apiName: params.get('apiName'),
       dubboIp: params.get('dubboIp'),
       dubboPort: params.get('dubboPort'),
+      apiClassName: '',
+      apiFunctionName: '',
       apiInfoData:{},
     }
 
@@ -41,6 +43,7 @@ class ApiForm extends React.Component {
             </div>
         ),
       });
+      return;
     }
 
     request({
@@ -58,7 +61,9 @@ class ApiForm extends React.Component {
         const apiInfoData = JSON.parse(response);
         this.setState({
           loading: false,
-          apiInfoData: apiInfoData
+          apiInfoData: apiInfoData,
+          apiClassName: apiInfoData.apiModelClass,
+          apiFunctionName: apiInfoData.apiName,
         })
       } else {
         Dialog.alert({
@@ -74,12 +79,6 @@ class ApiForm extends React.Component {
         });
       }
     });
-  }
-
-  showApiName(){
-    return (
-      <span>{this.state.apiName}</span>
-    );
   }
 
   loadApiInfoAndBuildForm(){
@@ -127,10 +126,55 @@ class ApiForm extends React.Component {
       return(
         <Form>
           <Form.Item
-            key=''
-            label=''>
-              
-            </Form.Item>
+            key='formItemAsync'
+            label='是否异步调用(此参数不可修改,根据接口定义的是否异步显示)'>
+            <Select 
+              id='formItemAsync'
+              name='formItemAsync'
+              style={{ marginLeft: 5, width: '100px' }}
+              readOnly={true}
+              defaultValue={this.state.apiInfoData.async}
+            >
+              <Select.Option value="true">true</Select.Option>
+              <Select.Option value="false">false</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            key='apiClassName'
+            label='接口模块(此参数不可修改)'>
+            <Input
+              id='apiClassName'
+              htmlType={'text'}
+              name='apiClassName'
+              style={{ marginLeft: 5, width: 400 }}
+              defaultValue={this.state.apiClassName}
+              readOnly={true}
+            />
+          </Form.Item>
+          <Form.Item
+            key='apiFunctionName'
+            label='接口方法名(此参数不可修改)'>
+            <Input
+              id='apiFunctionName'
+              htmlType={'text'}
+              name='apiFunctionName'
+              style={{ marginLeft: 5, width: 400 }}
+              defaultValue={this.state.apiFunctionName}
+              readOnly={true}
+            />
+          </Form.Item>
+          <Form.Item
+            key='registryCenterUrl'
+            label='注册中心地址, 如果为空将使用Dubbo 提供者Ip和端口进行直连'>
+            <Input
+              id='registryCenterUrl'
+              htmlType={'text'}
+              name='registryCenterUrl'
+              style={{ marginLeft: 5, width: 400 }}
+              placeholder='nacos://127.0.0.1:8848'
+              trim={true}
+            />
+          </Form.Item>
           {
             formsArray.map((item, index) => {
               return (
@@ -159,7 +203,7 @@ class ApiForm extends React.Component {
           <Button
             type={'primary'}
             style={{ marginLeft: 10, width: '600px' }}
-            onClick={ this.doTestApi }
+            onClick={ this.doTestApi.bind(this) }
           >
             测试
           </Button>
@@ -174,10 +218,73 @@ class ApiForm extends React.Component {
   }
 
   doTestApi(){
-    var testInputs = $('.dubbo-doc-form-item-class input');
-    testInputs.each((index, element) => {
-      console.log(element.id);
+    var allFromItems = $('.dubbo-doc-form-item-class input, .dubbo-doc-form-item-class  select, .dubbo-doc-form-item-class textarea');
+    var tempMap = new Map();
+    allFromItems.each((index, element) => {
+      var elementIdSplited = element.id.split('@@');
+      var tempMapKey = elementIdSplited[0];
+      var tempMapValueArray = tempMap.get(tempMapKey);
+      if(!tempMapValueArray){
+        tempMapValueArray = new Array();
+        tempMap.set(tempMapKey + "@@" + elementIdSplited[1], tempMapValueArray);
+      }
+      tempMapValueArray.push(element);
     });
+    var postData = new Array();
+    tempMap.forEach((value, key) => {
+      var postDataItem = {};
+      postData.push(postDataItem);
+      postDataItem['prarmType'] = key.split('@@')[0];
+      var postDataItemValue = {};
+      postDataItem['prarmValue'] = postDataItemValue;
+      value.forEach(element => {
+        if(element.tagName == 'TEXTAREA'){
+          if(element.value != ''){
+            postDataItemValue[element.name] = JSON.parse(element.value);
+          }
+        } else {
+          var elementValue = element.value;
+          if($(element).attr('aria-valuetext')){
+            elementValue = $(element).attr('aria-valuetext');
+          }
+          postDataItemValue[element.name] = elementValue;
+        }
+      });
+    });
+    var registryCenterUrl = $('#registryCenterUrl').val();
+    if(registryCenterUrl == ''){
+      registryCenterUrl = 'dubbo://' + this.state.dubboIp + ':' + this.state.dubboPort;
+    }
+    console.log(postData);
+    console.log(JSON.stringify(postData));
+    request({
+      url: '/api/requestDubbo',
+      method: 'post',
+      params: {
+        async: $('#formItemAsync').attr('aria-valuetext'),
+        interfaceClassName: $('#apiClassName').val(),
+        methodName: $('#apiFunctionName').val(),
+        registryCenterUrl: registryCenterUrl
+      },
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8' 
+      },
+      data: JSON.stringify(postData),
+    }).catch(error => {
+      console.log(error);
+    }).then(response => {
+      console.log(response);
+    });
+  }
+
+  showApiInfo(){
+    return (
+      <div>
+        <h1>接口名称: <span>{this.state.apiInfoData.apiChName + '(' + this.state.apiName + ')'}</span></h1>
+        <h1>接口说明: <span>{this.state.apiInfoData.apiRespDec}</span></h1>
+        <h1>接口版本: <span>{this.state.apiInfoData.apiVersion}</span></h1>
+      </div>
+    );
   }
 
   buildInputText(item){
@@ -191,6 +298,22 @@ class ApiForm extends React.Component {
         placeholder={item.get('example')}
         defaultValue={item.get('defaultValue')}
         trim={true}
+      />
+    );
+  }
+
+  buildInputChar(item){
+    return (
+      <Input
+        id={item.get('paramType') + '@@' + item.get('paramIndex') + '@@' + item.get('javaType')}
+        htmlType={'text'}
+        name={item.get('name')}
+        className={'dubbo-doc-form-item-class'}
+        style={{ marginLeft: 5, width: 400 }}
+        placeholder={item.get('example')}
+        defaultValue={item.get('defaultValue')}
+        trim={true}
+        maxLength={1}
       />
     );
   }
@@ -254,18 +377,13 @@ class ApiForm extends React.Component {
         id={item.get('paramType') + '@@' + item.get('paramIndex') + '@@' + item.get('javaType')}
         name={item.get('name')}
         className={'dubbo-doc-form-item-class'}
-        style={{ marginLeft: 5, width: '200px' }}
+        style={{ marginLeft: 5, width: '400px' }}
         dataSource={dataSource}
       />
     );
   }
 
   buildFormItem(item){
-    // 把dubbo的 接口类名和方法名拆出来,放到 state里面
-    // TODO 加几个不可编辑并有默认值的input,到时候直接取: 接口类名, 接口方法名, 是否异步(从接口返回中取)
-    // 加个注册中心地址的input,默认空:  注册中心地址,如: nacos://127.0.0.1:8848, 如果为空将使用Dubbo 提供者Ip和端口进行直连
-    // 考虑把什么东西放到Input 的id里, 其他的属性参数重设(从item里面取)
-    // 从表单取东西来拼参数
     switch (item.get('htmlType')) {
       case 'TEXT':
         return this.buildInputText(item);
@@ -274,7 +392,7 @@ class ApiForm extends React.Component {
         return this.buildInputText(item);
         break;
       case 'TEXT_CHAR':
-        return this.buildInputText(item);
+        return this.buildInputChar(item);
         break;
       case 'NUMBER_INTEGER':
         return this.buildNumberInteger(item);
@@ -300,7 +418,7 @@ class ApiForm extends React.Component {
     return (
       <div>
         <div>
-          <h1>接口名称: {this.showApiName()}</h1>
+          {this.showApiInfo()}
         </div>
         <Loading
           shape={'flower'}

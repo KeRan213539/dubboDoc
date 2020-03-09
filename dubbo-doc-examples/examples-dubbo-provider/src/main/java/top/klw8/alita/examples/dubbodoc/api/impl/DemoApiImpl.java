@@ -24,8 +24,12 @@ public class DemoApiImpl implements IDemoApi {
     @DubboApi("入参出参都是bean")
     @Override
     public DemoRespBean1 demoApi1(DemoParamBean1 param1, DemoParamBean2 param2) {
-        log.info(" called demoApi1");
-        return null;
+        log.info("called demoApi1");
+        DemoRespBean1 result = new DemoRespBean1();
+        result.setCode("123456789");
+        result.setMessage("called demoApi1");
+        result.setMessage2("demoApi1 被打了");
+        return result;
     }
 
     @DubboApi(value = "入参出参都是String", responseClassDescription="一串字符串")
@@ -43,6 +47,6 @@ public class DemoApiImpl implements IDemoApi {
     @DubboApi(value = "无参接口", responseClassDescription="一串字符串")
     @Override
     public String demoApi4() {
-        return null;
+        return "asdfasdfsdafds";
     }
 }
