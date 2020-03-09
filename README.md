@@ -27,7 +27,7 @@ dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能
 ## 注册中心支持
 * 理论上dubbo支持的所有注册中心都支持
 
-## 如何使用?(这部分会在正式发布后修改: 增加引用的包名和ui-server的下载连接)
+## 如何使用?(TODO-这部分会在正式发布后修改: 增加引用的包名和ui-server的下载连接)
 1. dubbo项目的方法参数中加上 dubbo doc注解
    * 引入 dubbo的core包
    * 如果接口和参数是一个单独的jar包项目,那么只用引入dubbo doc的注解包
@@ -36,12 +36,12 @@ dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能
 4. 访问: http:// localhost:8888
    * 如何修改端口
    * swagger-ui http:// localhost:8888/swagger-ui.html
-### 注解使用:
+### 注解使用 TODO:
 ### dubbo-doc-ui 
 * 获取接口列表直连: 由于可能不同功能的dubbo服务都会注册到同一个注册中心,但是dubbo doc
 使用的接口名是一样的,所以dubbo doc的接口采用直连方式以获取到不同功能服务的不同接口列表
 * 测试可以直连或者走注册中心
-### swagger-ui
+### swagger-ui TODO
 ## 项目结构
 * dubbo-doc-annotations: 文档生成辅助注解项目
 * dubbo-doc-core: 负责注解解析,文档信息获取接口(dubbo接口)
