@@ -150,6 +150,9 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
                                 prarmListItem.put("description", requestParam.description());
                                 prarmListItem.put("example", requestParam.example());
                                 prarmListItem.put("defaultValue", requestParam.defaultValue());
+                                prarmListItem.put("required", requestParam.required());
+                            } else {
+                                prarmListItem.put("required", false);
                             }
                         }
                     }
@@ -180,9 +183,12 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
 //                    System.out.println("            @有注解@: " + field.getName()
 //                            + "【" + field.getType().getCanonicalName() + "】" + requestParam.value());
                 paramBean.setNameCh(requestParam.value());
+                paramBean.setRequired(requestParam.required());
                 paramBean.setDescription(requestParam.description());
                 paramBean.setExample(requestParam.example());
                 paramBean.setDefaultValue(requestParam.defaultValue());
+            } else {
+                paramBean.setRequired(false);
             }
 
             if(this.processHtmlType(field.getType(), requestParam, paramBean) == null){

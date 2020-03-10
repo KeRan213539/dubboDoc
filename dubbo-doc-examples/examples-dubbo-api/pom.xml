@@ -9,7 +9,7 @@
     <parent>
         <groupId>top.klw8.alita.dubbodoc</groupId>
         <artifactId>dubbo-doc-examples</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     
 

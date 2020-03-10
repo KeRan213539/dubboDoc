@@ -22,6 +22,12 @@ public @interface RequestParam {
 
     /**
      * @author klw(213539@qq.com)
+     * @Description: 是否必须
+     */
+    boolean required() default false;
+
+    /**
+     * @author klw(213539@qq.com)
      * @Description: 描述(可使用html标签)
      */
     String description() default "";

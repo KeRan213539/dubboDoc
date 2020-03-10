@@ -36,8 +36,8 @@ dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能
 4. 访问: http:// localhost:8888
    * 如何修改端口
    * swagger-ui http:// localhost:8888/swagger-ui.html
-### 注解使用 TODO:
-### dubbo-doc-ui 
+### 注解使用 TODO
+### dubbo-doc-ui TODO
 * 获取接口列表直连: 由于可能不同功能的dubbo服务都会注册到同一个注册中心,但是dubbo doc
 使用的接口名是一样的,所以dubbo doc的接口采用直连方式以获取到不同功能服务的不同接口列表
 * 测试可以直连或者走注册中心

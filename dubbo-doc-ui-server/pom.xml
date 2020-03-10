@@ -15,7 +15,7 @@
     </parent>
 
     <properties>
-        <dubbo.doc.version>0.1.0-SNAPSHOT</dubbo.doc.version>
+        <dubbo.doc.version>1.0.0-SNAPSHOT</dubbo.doc.version>
     </properties>
     
     <dependencyManagement>

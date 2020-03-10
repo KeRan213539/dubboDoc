@@ -30,6 +30,12 @@ public class ParamBean {
 
     /**
      * @author klw(213539@qq.com)
+     * @Description: 是否必须
+     */
+    private Boolean required;
+
+    /**
+     * @author klw(213539@qq.com)
      * @Description: 描述
      */
     private String description;

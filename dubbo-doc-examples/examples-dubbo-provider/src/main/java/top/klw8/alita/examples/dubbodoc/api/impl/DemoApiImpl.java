@@ -34,7 +34,7 @@ public class DemoApiImpl implements IDemoApi {
 
     @DubboApi(value = "入参出参都是String", responseClassDescription="一串字符串")
     @Override
-    public String demoApi2(@RequestParam("参数1") String prarm1, String prarm2) {
+    public String demoApi2(@RequestParam(value = "参数1", required = true) String prarm1, String prarm2) {
         log.info(" called demoApi2");
         return "demoApi2";
     }
