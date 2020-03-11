@@ -5,11 +5,13 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 import top.klw8.alita.dubbodoc.annotations.RequestParam;
 import top.klw8.alita.dubbodoc.annotations.ResponseProperty;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author klw(213539 @ qq.com)
@@ -94,6 +96,32 @@ public class ClassTypeUtils {
             }
             ParameterizedType pt  = (ParameterizedType)genericType;
             Object obj = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[0], processCount);
+            List<Object> list = new ArrayList<>(1);
+            list.add(obj);
+            return list;
+        }  else if (CompletableFuture.class.isAssignableFrom(classType)) {
+            // CompletableFuture 肯定有泛型
+            if(genericType == null){
+                return null;
+            }
+            ParameterizedType pt  = (ParameterizedType)genericType;
+            String typeName = pt.getActualTypeArguments()[0].getTypeName();
+            Class<?> typeClass;
+            Class<?>[] subClassArray;
+            try {
+                typeClass = Class.forName(typeName.substring(0, typeName.indexOf("<")));
+                String subTypeNames = typeName.substring((typeName.indexOf("<") + 1), (typeName.length() - 1));
+                String[] subTypeNamesArray = subTypeNames.split(",");
+                subClassArray = new Class[subTypeNamesArray.length];
+                for(int i = 0; i < subTypeNamesArray.length; i++){
+                    subClassArray[i] = Class.forName(subTypeNamesArray[i]);
+                }
+            } catch (ClassNotFoundException e) {
+                log.warn("获取 CompletableFuture 中的泛型发生异常", e);
+                return null;
+            }
+            ParameterizedType pt2 = ParameterizedTypeImpl.make(typeClass, subClassArray, null);
+            Object obj = initClassTypeWithDefaultValue(pt2, typeClass, processCount);
             List<Object> list = new ArrayList<>(1);
             list.add(obj);
             return list;
