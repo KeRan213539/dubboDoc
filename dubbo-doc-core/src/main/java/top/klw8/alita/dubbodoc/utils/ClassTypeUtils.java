@@ -8,10 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import top.klw8.alita.dubbodoc.annotations.RequestParam;
 import top.klw8.alita.dubbodoc.annotations.ResponseProperty;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -40,8 +37,8 @@ public class ClassTypeUtils {
             SerializerFeature.WriteEnumUsingName
     };
 
-    public static String calss2Json(Field field, Class<?> classType){
-        Object obj = initClassTypeWithDefaultValue(field, classType, 0);
+    public static String calss2Json(Type genericType, Class<?> classType){
+        Object obj = initClassTypeWithDefaultValue(genericType, classType, 0);
         return JSON.toJSONString(obj, FAST_JSON_FEATURES);
     }
 
@@ -49,16 +46,12 @@ public class ClassTypeUtils {
      * @author klw(213539@qq.com)
      * @Description: 根据 Class 实例化
      */
-    public static Object initClassTypeWithDefaultValue(Field field, Class<?> classType, int processCount) {
+    public static Object initClassTypeWithDefaultValue(Type genericType, Class<?> classType, int processCount) {
         if(processCount >= 5){
             log.warn("参数Bean的深度已超过5层,将忽略更深层!请修改参数结构或者检查Bean中是否有循环引用!");
             return null;
         }
         processCount++;
-
-        if(classType == null && field != null) {
-            classType = field.getType();
-        }
 
         if(Integer.class.isAssignableFrom(classType)){
             return 0;
@@ -96,20 +89,20 @@ public class ClassTypeUtils {
             return new Object[]{obj};
         } else if (Collection.class.isAssignableFrom(classType)) {
             // 已经判断了是 集合 ,肯定有泛型
-            if(field == null){
+            if(genericType == null){
                 return null;
             }
-            ParameterizedType pt  = (ParameterizedType)field.getGenericType();
+            ParameterizedType pt  = (ParameterizedType)genericType;
             Object obj = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[0], processCount);
             List<Object> list = new ArrayList<>(1);
             list.add(obj);
             return list;
         } else if (Map.class.isAssignableFrom(classType)) {
             // 已经判断了是 Map ,肯定有泛型
-            if(field == null){
+            if(genericType == null){
                 return null;
             }
-            ParameterizedType pt  = (ParameterizedType)field.getGenericType();
+            ParameterizedType pt  = (ParameterizedType)genericType;
             Object objKey = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[0], processCount);
             Object objValue = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[1], processCount);
             Map<Object, Object> map = new HashMap<>(1);
@@ -132,9 +125,31 @@ public class ClassTypeUtils {
                         strValue.append("【如: ").append(responseProperty.example()).append("】");
                     }
                     result.put(field2.getName(), strValue.toString());
+                } else {
+                    // 是string,但是没有注解
+                    result.put(field2.getName(), initClassTypeWithDefaultValue(field2.getGenericType(), field2.getType(), processCount));
                 }
             } else {
-                result.put(field2.getName(), initClassTypeWithDefaultValue(field2, field2.getType(), processCount));
+                // 检查该属性的类型是否是泛型
+                if("T".equals(field2.getGenericType().getTypeName())) {
+                    // 该属性的类型是泛型,从该属性所在的Class的定义中找泛型
+                    ParameterizedType pt = (ParameterizedType) genericType;
+                    Type[] actualTypeArguments = pt.getActualTypeArguments();
+                    if(actualTypeArguments.length > 0) {
+                        // 找到了
+                        if(actualTypeArguments.length == 1) {
+                            result.put(field2.getName(), initClassTypeWithDefaultValue(field2.getGenericType(), (Class<?>) pt.getActualTypeArguments()[0], processCount));
+                        } else {
+                            log.warn("{}#{}的泛型暂不支持,该属性将被忽略",classType.getName(), field2.getName());
+                        }
+                    } else {
+                        // 找不到
+                        result.put(field2.getName(), initClassTypeWithDefaultValue(field2.getGenericType(), field2.getType(), processCount));
+                    }
+                } else {
+                    // 不是泛型
+                    result.put(field2.getName(), initClassTypeWithDefaultValue(field2.getGenericType(), field2.getType(), processCount));
+                }
             }
         }
         return result;

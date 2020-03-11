@@ -1,6 +1,7 @@
 package top.klw8.alita.dubbodoc.core;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ProtocolConfig;
@@ -114,7 +115,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
                     apiParamsAndResp.put("apiRespDec", dubboApi.responseClassDescription());
                     apiParamsAndResp.put("apiModelClass", moduleCacheItem.get("moduleClassName"));
                     apiParamsAndResp.put("params", paramList);
-                    apiParamsAndResp.put("response", ClassTypeUtils.calss2Json(null, method.getReturnType()));
+                    apiParamsAndResp.put("response", ClassTypeUtils.calss2Json(method.getGenericReturnType(), method.getReturnType()));
                     for(int i = 0; i < argsClass.length; i++){
                         Class<?> argClass = argsClass[i];
                         Annotation[] argAnns = argsAnns[i];
@@ -159,7 +160,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
                 }
             }
         });
-
+        System.out.println(JSON.toJSONString(DubboDocCache.getApiParamsAndResp("top.klw8.alita.examples.dubbodoc.api.IDemoApi.demoApi5"), SerializerFeature.PrettyFormat));
         log.info("================= Dubbo Doc--Dubbo Doc注解扫描并处理完毕 ================");
     }
 
@@ -193,7 +194,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
 
             if(this.processHtmlType(field.getType(), requestParam, paramBean) == null){
                 // 不是基本元素,处理成JSON
-                Object objResult =  ClassTypeUtils.initClassTypeWithDefaultValue(field, field.getType(), 0);
+                Object objResult =  ClassTypeUtils.initClassTypeWithDefaultValue(field.getGenericType(), field.getType(), 0);
                 if(!ClassTypeUtils.isBaseType(objResult)){
                     paramBean.setHtmlType(HtmlTypeEnum.TEXT_AREA);
                     paramBean.setSubParamsJson(JSON.toJSONString(objResult, ClassTypeUtils.FAST_JSON_FEATURES));

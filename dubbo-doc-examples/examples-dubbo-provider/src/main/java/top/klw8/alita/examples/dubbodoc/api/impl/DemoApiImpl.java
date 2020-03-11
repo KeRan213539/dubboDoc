@@ -8,7 +8,8 @@ import top.klw8.alita.dubbodoc.annotations.RequestParam;
 import top.klw8.alita.examples.dubbodoc.api.IDemoApi;
 import top.klw8.alita.examples.dubbodoc.params.DemoParamBean1;
 import top.klw8.alita.examples.dubbodoc.params.DemoParamBean2;
-import top.klw8.alita.examples.dubbodoc.params.DemoRespBean1;
+import top.klw8.alita.examples.dubbodoc.responses.BaseResponse;
+import top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1;
 
 /**
  * @author klw(213539 @ qq.com)
@@ -48,5 +49,18 @@ public class DemoApiImpl implements IDemoApi {
     @Override
     public String demoApi4() {
         return "asdfasdfsdafds";
+    }
+
+    @DubboApi(value = "响应带泛型", responseClassDescription="响应带泛型")
+    public BaseResponse<DemoRespBean1> demoApi5(){
+        BaseResponse<DemoRespBean1> response = new BaseResponse<>();
+        DemoRespBean1 responseData = new DemoRespBean1();
+        responseData.setCode("2222");
+        responseData.setMessage("msg1");
+        responseData.setMessage2("msg2");
+        response.setData(responseData);
+        response.setCode("1111");
+        response.setMessage("msg");
+        return response;
     }
 }

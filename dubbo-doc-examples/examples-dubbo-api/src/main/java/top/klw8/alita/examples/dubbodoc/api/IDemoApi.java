@@ -2,7 +2,8 @@ package top.klw8.alita.examples.dubbodoc.api;
 
 import top.klw8.alita.examples.dubbodoc.params.DemoParamBean1;
 import top.klw8.alita.examples.dubbodoc.params.DemoParamBean2;
-import top.klw8.alita.examples.dubbodoc.params.DemoRespBean1;
+import top.klw8.alita.examples.dubbodoc.responses.BaseResponse;
+import top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1;
 
 /**
  * @author klw(213539 @ qq.com)
@@ -17,7 +18,7 @@ public interface IDemoApi {
      * @Description: 入参出参都是bean
      * @Date 2020/2/4 0:01
      * @param: param
-     * @return top.klw8.alita.examples.dubbodoc.params.DemoRespBean1
+     * @return top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1
      */
     DemoRespBean1 demoApi1(DemoParamBean1 param1, DemoParamBean2 param2);
 
@@ -48,5 +49,11 @@ public interface IDemoApi {
      * @return java.lang.String
      */
     String demoApi4();
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 测试响应中使用泛型
+     */
+    BaseResponse<DemoRespBean1> demoApi5();
 
 }

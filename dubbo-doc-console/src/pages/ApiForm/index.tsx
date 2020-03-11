@@ -264,7 +264,7 @@ class ApiForm extends React.Component {
       return (
         <Input.TextArea
           readOnly
-          style={{ marginLeft: 5, width: '600px' }}
+          style={{ marginLeft: 5, minWidth: '600px' }}
           rows={10}
         />
       );
@@ -276,7 +276,11 @@ class ApiForm extends React.Component {
       }
       return (
         <ReactJson 
+        style={{ marginLeft: 5, minWidth: '600px' }}
           name={false} 
+          theme='apathy'
+          iconStyle='square'
+          displayDataTypes={true}
           src={responseInfoJsonObj} 
         />
       );
@@ -284,7 +288,7 @@ class ApiForm extends React.Component {
       return (
         <Input.TextArea
           readOnly
-          style={{ marginLeft: 5, width: '600px' }}
+          style={{ marginLeft: 5, minWidth: '600px' }}
           rows={10}
           defaultValue={this.state.responseInfo}
         />
@@ -297,7 +301,7 @@ class ApiForm extends React.Component {
       return (
         <Input.TextArea
           readOnly
-          style={{ marginLeft: 5, width: '600px' }}
+          style={{ marginLeft: 5, minWidth: '600px' }}
           rows={10}
         />
       );
@@ -308,15 +312,18 @@ class ApiForm extends React.Component {
       }
       return (
         <ReactJson 
-          style={{ marginLeft: 5}}
+          style={{ marginLeft: 5, minWidth: '600px' }}
           name={false} 
+          theme='apathy'
+          iconStyle='square'
+          displayDataTypes={true}
           src={this.state.responseData} 
         />
       );
     } catch (e) {
       return (
         <Input.TextArea
-          style={{ marginLeft: 5, width: '600px' }}
+          style={{ marginLeft: 5, minWidth: '600px' }}
           rows={10}
           readOnly
           value={this.state.responseData}

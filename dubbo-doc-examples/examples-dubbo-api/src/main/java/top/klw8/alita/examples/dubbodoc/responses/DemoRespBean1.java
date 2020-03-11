@@ -1,4 +1,4 @@
-package top.klw8.alita.examples.dubbodoc.params;
+package top.klw8.alita.examples.dubbodoc.responses;
 
 import lombok.Getter;
 import lombok.Setter;
