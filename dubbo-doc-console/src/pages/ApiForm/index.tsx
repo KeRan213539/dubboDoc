@@ -127,7 +127,7 @@ class ApiForm extends React.Component {
             formItem.set('defaultValue', prarmInfoItem.defaultValue);
             formItem.set('allowableValues', prarmInfoItem.allowableValues);
             formItem.set('subParamsJson', prarmInfoItem.subParamsJson);
-            formItem.set('required', paramItem.required);
+            formItem.set('required', prarmInfoItem.required);
             formsArray.push(formItem);
           }
         }
