@@ -18,7 +18,7 @@ import top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1;
  * @date 2020/2/3 2:03
  */
 @Slf4j
-@Service(async=true)
+@Service(async=false)
 @DubboApiModule(value = "demo", apiInterface = IDemoApi.class)
 public class DemoApiImpl implements IDemoApi {
 

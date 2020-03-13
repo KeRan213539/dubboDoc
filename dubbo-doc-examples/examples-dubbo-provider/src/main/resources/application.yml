@@ -9,7 +9,7 @@ dubbo:
   provider:
     timeout: 2000
   protocol:
-    port: 20881
+    port: 20882
     name: dubbo
   application:
     name:dubbo-doc-example-provider

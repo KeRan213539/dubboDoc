@@ -160,7 +160,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
                 }
             }
         });
-        System.out.println(JSON.toJSONString(DubboDocCache.getApiParamsAndResp("top.klw8.alita.examples.dubbodoc.api.IDemoApi.demoApi5"), SerializerFeature.PrettyFormat));
+//        System.out.println(JSON.toJSONString(DubboDocCache.getApiParamsAndResp("top.klw8.alita.examples.dubbodoc.api.IDemoApi.demoApi5"), SerializerFeature.PrettyFormat));
         log.info("================= Dubbo Doc--Dubbo Doc注解扫描并处理完毕 ================");
     }
 
