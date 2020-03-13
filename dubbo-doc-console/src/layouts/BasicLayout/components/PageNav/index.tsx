@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { AppLink } from '@ice/stark';
 import { Nav } from '@alifd/next';
-import { store as appStore } from 'ice'
 
 const SubNav = Nav.SubNav;
 const NavItem = Nav.Item;
@@ -57,11 +56,8 @@ function getSubMenuOrItem(item: IMenuItem, index: number, isCollapse: boolean) {
 }
 
 const Navigation = (props, context) => {
-  const { pathname } = props;
+  const { pathname, menuData } = props;
   const { isCollapse } = context;
-  const [ menuState, menuAction ] = appStore.useModel('asideMenu');
-
-  const [asideMenus, setAsideMenus] = useState(menuState.asideMenus);
 
   return (
     <Nav
@@ -73,7 +69,7 @@ const Navigation = (props, context) => {
       iconOnly={isCollapse}
       hasArrow={false}
     >
-      {getNavMenuItems(asideMenus, isCollapse)}
+      {getNavMenuItems(menuData, isCollapse)}
     </Nav>
   );
 };

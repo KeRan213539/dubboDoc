@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Shell, Input, Button } from '@alifd/next';
 import PageNav from './components/PageNav';
 import Footer from './components/Footer';
-import { store as appStore } from 'ice'
 import { request } from 'ice';
 
 export default function BasicLayout(props: {
@@ -11,11 +10,14 @@ export default function BasicLayout(props: {
 }) {
   const { children, pathname } = props;
 
-  const [ menuState, menuAction ] = appStore.useModel('asideMenu');
 
   const [dubboIp, setDubboIp] = useState('127.0.0.1');
 
   const [dubboPort, setDubboPort] = useState('20881');
+
+  const [menuData4Nav, setData4Nav] = useState(new Array());
+
+
 
   async function loadMenus(){
     const response = await request({
@@ -28,7 +30,7 @@ export default function BasicLayout(props: {
     }).catch(error => {
       console.log(error);
     });
-    const resultData = new Array();
+    let resultData = new Array();
     if(response && response != ''){
       const menuData = JSON.parse(response);
       menuData.sort((a,b) => {
@@ -57,8 +59,7 @@ export default function BasicLayout(props: {
         resultData.push(menu2);
       }
     }
-    menuAction.loadMenus(resultData);
-    
+    setData4Nav(resultData);
   }
 
   return (
@@ -98,7 +99,7 @@ export default function BasicLayout(props: {
       </Shell.Branding>
 
       <Shell.Navigation>
-        <PageNav pathname={pathname} />
+        <PageNav pathname={pathname} menuData={menuData4Nav} />
       </Shell.Navigation>
 
       <Shell.Content>{children}</Shell.Content>
