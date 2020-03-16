@@ -49,8 +49,8 @@ public class ClassTypeUtils {
      * @Description: 根据 Class 实例化
      */
     public static Object initClassTypeWithDefaultValue(Type genericType, Class<?> classType, int processCount) {
-        if(processCount >= 5){
-            log.warn("参数Bean的深度已超过5层,将忽略更深层!请修改参数结构或者检查Bean中是否有循环引用!");
+        if(processCount >= 10){
+            log.warn("参数Bean的深度已超过10层,将忽略更深层!请修改参数结构或者检查Bean中是否有循环引用!");
             return null;
         }
         processCount++;
@@ -100,7 +100,7 @@ public class ClassTypeUtils {
             list.add(obj);
             return list;
         }  else if (CompletableFuture.class.isAssignableFrom(classType)) {
-            // CompletableFuture 肯定有泛型
+            // CompletableFuture
             if(genericType == null){
                 return null;
             }
@@ -109,6 +109,12 @@ public class ClassTypeUtils {
             Class<?> typeClass;
             Class<?>[] subClassArray;
             try {
+                if(typeName.indexOf("<") == -1){
+                    // CompletableFuture 中的类没有泛型
+                    typeClass = Class.forName(typeName);
+                    return initClassTypeWithDefaultValue(null, typeClass, processCount);
+                }
+                // CompletableFuture 中的类有泛型
                 typeClass = Class.forName(typeName.substring(0, typeName.indexOf("<")));
                 String subTypeNames = typeName.substring((typeName.indexOf("<") + 1), (typeName.length() - 1));
                 String[] subTypeNamesArray = subTypeNames.split(",");
@@ -121,10 +127,7 @@ public class ClassTypeUtils {
                 return null;
             }
             ParameterizedType pt2 = ParameterizedTypeImpl.make(typeClass, subClassArray, null);
-            Object obj = initClassTypeWithDefaultValue(pt2, typeClass, processCount);
-            List<Object> list = new ArrayList<>(1);
-            list.add(obj);
-            return list;
+            return initClassTypeWithDefaultValue(pt2, typeClass, processCount);
         } else if (Map.class.isAssignableFrom(classType)) {
             // 已经判断了是 Map ,肯定有泛型
             if(genericType == null){

@@ -7,11 +7,11 @@ import top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1;
 
 /**
  * @author klw(213539 @ qq.com)
- * @ClassName: IDemoApi
- * @Description: demo api 接口
+ * @ClassName: ISyncDemo
+ * @Description: 同步demo
  * @date 2020/2/2 23:41
  */
-public interface IDemoApi {
+public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)

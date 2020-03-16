@@ -5,7 +5,7 @@ import org.apache.dubbo.config.annotation.Service;
 import top.klw8.alita.dubbodoc.annotations.DubboApi;
 import top.klw8.alita.dubbodoc.annotations.DubboApiModule;
 import top.klw8.alita.dubbodoc.annotations.RequestParam;
-import top.klw8.alita.examples.dubbodoc.api.IDemoApi;
+import top.klw8.alita.examples.dubbodoc.api.ISyncDemo;
 import top.klw8.alita.examples.dubbodoc.params.DemoParamBean1;
 import top.klw8.alita.examples.dubbodoc.params.DemoParamBean2;
 import top.klw8.alita.examples.dubbodoc.responses.BaseResponse;
@@ -14,13 +14,13 @@ import top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DemoApiImpl
- * @Description: demo api 接口实现
+ * @Description: 同步demo实现
  * @date 2020/2/3 2:03
  */
 @Slf4j
-@Service(async=false)
-@DubboApiModule(value = "demo", apiInterface = IDemoApi.class)
-public class DemoApiImpl implements IDemoApi {
+@Service
+@DubboApiModule(value = "同步demo", apiInterface = ISyncDemo.class)
+public class SyncDemoImpl implements ISyncDemo {
 
     @DubboApi("入参出参都是bean")
     @Override

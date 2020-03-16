@@ -69,6 +69,7 @@ class ApiForm extends React.Component {
           apiInfoData: apiInfoData,
           apiClassName: apiInfoData.apiModelClass,
           apiFunctionName: apiInfoData.apiName,
+          apiDescription: apiInfoData.description,
           buildResponseInfo: true,
           responseInfo: apiInfoData.response
         });
@@ -406,6 +407,7 @@ class ApiForm extends React.Component {
         <h1>接口名称: <span>{this.state.apiInfoData.apiChName + '(' + this.state.apiName + ')'}</span></h1>
         <h1>接口说明: <span>{this.state.apiInfoData.apiRespDec}</span></h1>
         <h1>接口版本: <span>{this.state.apiInfoData.apiVersion}</span></h1>
+        <h1>接口描述: <span>{this.state.apiInfoData.apiDescription}</span></h1>
       </div>
     );
   }

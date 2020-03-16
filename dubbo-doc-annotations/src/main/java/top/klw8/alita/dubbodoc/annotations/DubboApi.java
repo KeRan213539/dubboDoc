@@ -21,6 +21,12 @@ public @interface DubboApi {
 
     /**
      * @author klw(213539@qq.com)
+     * @Description: 描述(可使用html标签)
+     */
+    String description() default "";
+
+    /**
+     * @author klw(213539@qq.com)
      * @Description: 版本
      */
     String version() default "";

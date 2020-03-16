@@ -95,6 +95,8 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
                     apiListItem.put("apiName", method.getName());
                     //接口中文名称
                     apiListItem.put("apiChName", dubboApi.value());
+                    // 接口描述
+                    apiListItem.put("description", dubboApi.description());
                     //接口版本
                     apiListItem.put("apiVersion", dubboApi.version());
                     //接口返回数据的说明

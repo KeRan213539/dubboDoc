@@ -37,7 +37,7 @@ public class DubboDocController {
 
     @ApiOperation(value = "请求dubbo接口", notes = "请求dubbo接口", httpMethod = "POST", produces = "application/json")
     @PostMapping("/requestDubbo")
-    public Mono<Object> callDubboService(CallDubboServiceRequest dubboCfg, @RequestBody List<CallDubboServiceRequestInterfacePrarm> methodPrarms){
+    public Mono<String> callDubboService(CallDubboServiceRequest dubboCfg, @RequestBody List<CallDubboServiceRequestInterfacePrarm> methodPrarms){
         String[] prarmTypes = null;
         Object[] prarmValues = null;
         if(CollectionUtils.isNotEmpty(methodPrarms)){
@@ -53,14 +53,13 @@ public class DubboDocController {
                 dubboCfg.getMethodName(), dubboCfg.isAsync(), prarmTypes, prarmValues);
         return Mono.fromFuture(future).map( o -> {
             // 去除dubbo泛化调用附加的"class"属性
-            String json = JSON.toJSONString(o, CLASS_NAME_PRE_FILTER);
-            return JSON.parse(json);
+            return JSON.toJSONString(o, CLASS_NAME_PRE_FILTER);
         });
     }
 
     @ApiOperation(value = "获取全部Module的基本信息,不包含api参数信息", notes = "获取全部Module的基本信息,不包含api参数信息", httpMethod = "GET", produces = "application/json")
     @GetMapping("/apiModuleList")
-    public Mono<Object> apiModuleList(ApiInfoRequest apiInfoRequest){
+    public Mono<String> apiModuleList(ApiInfoRequest apiInfoRequest){
         CallDubboServiceRequest req = new CallDubboServiceRequest();
         req.setRegistryCenterUrl("dubbo://" + apiInfoRequest.getDubboIp() + ":" + apiInfoRequest.getDubboPort());
         req.setInterfaceClassName("top.klw8.alita.dubbodoc.provider.IDubboDocProvider");
@@ -71,7 +70,7 @@ public class DubboDocController {
 
     @ApiOperation(value = "获取指定API的参数信息", notes = "获取指定API的参数信息", httpMethod = "GET", produces = "application/json")
     @GetMapping("/apiParamsResp")
-    public Mono<Object> apiParamsResp(ApiInfoRequest apiInfoRequest){
+    public Mono<String> apiParamsResp(ApiInfoRequest apiInfoRequest){
         CallDubboServiceRequest req = new CallDubboServiceRequest();
         req.setRegistryCenterUrl("dubbo://" + apiInfoRequest.getDubboIp() + ":" + apiInfoRequest.getDubboPort());
         req.setInterfaceClassName("top.klw8.alita.dubbodoc.provider.IDubboDocProvider");
