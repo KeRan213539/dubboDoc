@@ -49,7 +49,7 @@ dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能
     * description: 接口描述(可使用html标签)
     * version: 接口版本
     * responseClassDescription: 响应的数据的描述
-* @RequestParam 类属性注解:标注请求参数
+* @RequestParam 类属性/方法参数注解:标注请求参数
     * value: 参数名
     * required: 是否必传参数
     * description: 参数描述
