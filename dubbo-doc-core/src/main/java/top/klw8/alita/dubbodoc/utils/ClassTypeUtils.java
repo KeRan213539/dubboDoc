@@ -10,6 +10,8 @@ import top.klw8.alita.dubbodoc.annotations.RequestParam;
 import top.klw8.alita.dubbodoc.annotations.ResponseProperty;
 
 import java.lang.reflect.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -73,6 +75,12 @@ public class ClassTypeUtils {
             return (short)0;
         } else if(Boolean.class.isAssignableFrom(classType)){
             return false;
+        }else if(Date.class.isAssignableFrom(classType)){
+            return "【" + Date.class.getName() + "】yyyy-MM-dd HH:mm:ss";
+        } else if(LocalDate.class.isAssignableFrom(classType)){
+            return "【" + LocalDate.class.getName() + "】yyyy-MM-dd";
+        } else if(LocalDateTime.class.isAssignableFrom(classType)){
+            return "【" + LocalDateTime.class.getName() + "】yyyy-MM-dd HH:mm:ss";
         } else if(Enum.class.isAssignableFrom(classType)){
             Object[] enumConstants = classType.getEnumConstants();
             StringBuilder sb = new StringBuilder("|");

@@ -6,14 +6,22 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import top.klw8.alita.dubbodoc.controller.vo.ApiInfoRequest;
 import top.klw8.alita.dubbodoc.controller.vo.CallDubboServiceRequest;
 import top.klw8.alita.dubbodoc.controller.vo.CallDubboServiceRequestInterfacePrarm;
+import top.klw8.alita.dubbodoc.editor.CustomLocalDateEditor;
+import top.klw8.alita.dubbodoc.editor.CustomLocalDateTimeEditor;
+import top.klw8.alita.dubbodoc.editor.MyCustomDateEditor;
 import top.klw8.alita.dubbodoc.utils.DubboUtil;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -33,6 +41,14 @@ public class DubboDocController {
     private static final SimplePropertyPreFilter CLASS_NAME_PRE_FILTER = new SimplePropertyPreFilter(HashMap.class);
     static {
         CLASS_NAME_PRE_FILTER.getExcludes().add("class");
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        binder.registerCustomEditor(Date.class, new MyCustomDateEditor());
+        binder.registerCustomEditor(LocalDate.class, new CustomLocalDateEditor());
+        binder.registerCustomEditor(LocalDateTime.class, new CustomLocalDateTimeEditor());
     }
 
     @ApiOperation(value = "请求dubbo接口", notes = "请求dubbo接口", httpMethod = "POST", produces = "application/json")
