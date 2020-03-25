@@ -5,6 +5,9 @@ import top.klw8.alita.examples.dubbodoc.params.DemoParamBean2;
 import top.klw8.alita.examples.dubbodoc.responses.BaseResponse;
 import top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: ISyncDemo
@@ -55,5 +58,35 @@ public interface ISyncDemo {
      * @Description: 测试响应中使用泛型
      */
     BaseResponse<DemoRespBean1> demoApi5();
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 测试Map不带泛型
+     */
+    Map demoApi6();
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 测试Map泛型为Object
+     */
+    Map<Object, Object> demoApi7();
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 测试List不带泛型
+     */
+    List demoApi10();
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 测试List泛型为Object
+     */
+    List<Object> demoApi9();
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 测试 Object
+     */
+    Object demoApi8();
 
 }

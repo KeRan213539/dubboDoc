@@ -11,6 +11,9 @@ import top.klw8.alita.examples.dubbodoc.params.DemoParamBean2;
 import top.klw8.alita.examples.dubbodoc.responses.BaseResponse;
 import top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DemoApiImpl
@@ -62,5 +65,35 @@ public class SyncDemoImpl implements ISyncDemo {
         response.setCode("1111");
         response.setMessage("msg");
         return response;
+    }
+
+    @Override
+    @DubboApi(value = "测试Map不带泛型", responseClassDescription="Map不带泛型")
+    public Map demoApi6() {
+        return null;
+    }
+
+    @Override
+    @DubboApi(value = "测试Map泛型为Object", responseClassDescription="Map泛型为Object")
+    public Map<Object, Object> demoApi7() {
+        return null;
+    }
+
+    @Override
+    @DubboApi(value = "测试List不带泛型", responseClassDescription="List不带泛型")
+    public List demoApi10() {
+        return null;
+    }
+
+    @Override
+    @DubboApi(value = "测试List泛型为Object", responseClassDescription="List泛型为Object")
+    public List<Object> demoApi9() {
+        return null;
+    }
+
+    @Override
+    @DubboApi(value = "测试 Object", responseClassDescription="Object")
+    public Object demoApi8() {
+        return null;
     }
 }

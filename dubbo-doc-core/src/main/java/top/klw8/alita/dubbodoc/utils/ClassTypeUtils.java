@@ -98,16 +98,30 @@ public class ClassTypeUtils {
             Object obj = initClassTypeWithDefaultValue(null, arrType, processCount);
             return new Object[]{obj};
         } else if (Collection.class.isAssignableFrom(classType)) {
-            // 已经判断了是 集合 ,肯定有泛型
             if(genericType == null){
                 return null;
             }
-            ParameterizedType pt  = (ParameterizedType)genericType;
-            Object obj = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[0], processCount);
+
             List<Object> list = new ArrayList<>(1);
-            list.add(obj);
+            Object obj;
+            if(genericType instanceof ParameterizedType) {
+                ParameterizedType pt = (ParameterizedType) genericType;
+                obj = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[0], processCount);
+                list.add(obj);
+            }
             return list;
-        }  else if (CompletableFuture.class.isAssignableFrom(classType)) {
+        } else if (Map.class.isAssignableFrom(classType)) {
+            if(genericType == null){
+                return null;
+            }
+            Map<String, Object> map = new HashMap<>(1);
+            if(genericType instanceof ParameterizedType) {
+                ParameterizedType pt  = (ParameterizedType)genericType;
+                Object objValue = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[1], processCount);
+                map.put("", objValue);
+            }
+            return map;
+        } else if (CompletableFuture.class.isAssignableFrom(classType)) {
             // CompletableFuture
             if(genericType == null){
                 return null;
@@ -128,7 +142,7 @@ public class ClassTypeUtils {
                 String[] subTypeNamesArray = subTypeNames.split(",");
                 subClassArray = new Class[subTypeNamesArray.length];
                 for(int i = 0; i < subTypeNamesArray.length; i++){
-                    subClassArray[i] = Class.forName(subTypeNamesArray[i]);
+                    subClassArray[i] = Class.forName(subTypeNamesArray[i].trim());
                 }
             } catch (ClassNotFoundException e) {
                 log.warn("获取 CompletableFuture 中的泛型发生异常", e);
@@ -136,17 +150,6 @@ public class ClassTypeUtils {
             }
             ParameterizedType pt2 = ParameterizedTypeImpl.make(typeClass, subClassArray, null);
             return initClassTypeWithDefaultValue(pt2, typeClass, processCount);
-        } else if (Map.class.isAssignableFrom(classType)) {
-            // 已经判断了是 Map ,肯定有泛型
-            if(genericType == null){
-                return null;
-            }
-            ParameterizedType pt  = (ParameterizedType)genericType;
-            Object objKey = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[0], processCount);
-            Object objValue = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[1], processCount);
-            Map<Object, Object> map = new HashMap<>(1);
-            map.put(objKey, objValue);
-            return map;
         }
 
         Map<String, Object> result = new HashMap<>(16);

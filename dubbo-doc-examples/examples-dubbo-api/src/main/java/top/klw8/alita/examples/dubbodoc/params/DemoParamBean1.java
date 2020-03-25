@@ -42,4 +42,19 @@ public class DemoParamBean1 {
 
     private DemoParamBean1SubBean1 subBean3;
 
+    @RequestParam("Map无泛型")
+    private Map map1;
+
+    @RequestParam("Map泛型Object")
+    private Map<Object, Object> map2;
+
+    @RequestParam("List无泛型")
+    private List list1;
+
+    @RequestParam("List泛型Object")
+    private List<Object> list2;
+
+    @RequestParam("Object")
+    private Object obj1;
+
 }

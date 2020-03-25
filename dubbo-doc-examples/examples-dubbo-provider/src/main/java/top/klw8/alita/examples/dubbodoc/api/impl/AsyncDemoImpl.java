@@ -8,6 +8,8 @@ import top.klw8.alita.examples.dubbodoc.params.DemoParamBean1;
 import top.klw8.alita.examples.dubbodoc.params.DemoParamBean2;
 import top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,5 +34,41 @@ public class AsyncDemoImpl implements IAsyncDemo {
         result.setMessage("called demoApi1");
         result.setMessage2("demoApi1 被打了");
         return CompletableFuture.supplyAsync(() -> result, executor);
+    }
+
+    @Override
+    @DubboApi(value = "测试Map不带泛型", responseClassDescription="Map不带泛型")
+    public CompletableFuture<Map> demoApi6() {
+        return null;
+    }
+
+    @Override
+    @DubboApi(value = "测试Map泛型为Object", responseClassDescription="Map泛型为Object")
+    public CompletableFuture<Map<Object, Object>> demoApi7() {
+        return null;
+    }
+
+    @Override
+    @DubboApi(value = "测试List不带泛型", responseClassDescription="List不带泛型")
+    public CompletableFuture<List> demoApi10() {
+        return null;
+    }
+
+    @Override
+    @DubboApi(value = "测试List泛型为Object", responseClassDescription="List泛型为Object")
+    public CompletableFuture<List<Object>> demoApi9() {
+        return null;
+    }
+
+    @Override
+    @DubboApi(value = "测试 Object", responseClassDescription="Object")
+    public CompletableFuture<Object> demoApi8() {
+        return null;
+    }
+
+    @Override
+    @DubboApi(value = "测试 Integer", responseClassDescription="Integer")
+    public CompletableFuture<Integer> demoApi11() {
+        return null;
     }
 }
