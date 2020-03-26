@@ -46,7 +46,8 @@ function getSubMenuOrItem(item: IMenuItem, index: number, isCollapse: boolean) {
   }
   const navItem = (
     <NavItem key={item.path} icon={item.icon}>
-      <AppLink to={item.path}>
+      <AppLink to={item.path}
+      hashType={true}>
         {item.name}
       </AppLink>
     </NavItem>

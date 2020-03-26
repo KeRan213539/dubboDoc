@@ -13,7 +13,7 @@ const appConfig = {
     ),
   },
   router: {
-    type: 'browser',
+    type: 'hash',
   },
   icestark: {
     type: 'framework',
