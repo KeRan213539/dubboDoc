@@ -3,4 +3,6 @@ server:
 spring:
   application:
     name: dubbo-doc-ui-server
-    
+dubbo:
+  reference:
+    heartbeat: 1000
