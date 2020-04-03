@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import top.klw8.alita.dubbodoc.editor.CustomLocalDateTimeEditor;
 import top.klw8.alita.dubbodoc.editor.MyCustomDateEditor;
 import top.klw8.alita.dubbodoc.utils.DubboUtil;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,8 +42,23 @@ public class DubboDocController {
 
     private static final SimplePropertyPreFilter CLASS_NAME_PRE_FILTER = new SimplePropertyPreFilter(HashMap.class);
     static {
+        // 去除返回结果中的 class 属性
         CLASS_NAME_PRE_FILTER.getExcludes().add("class");
     }
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 默认重试次数
+     */
+    @Value("${dubbo.consumer.retries:2}")
+    private int retries;
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 默认超时
+     */
+    @Value("${dubbo.consumer.timeout:1000}")
+    private int timeout;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -49,6 +66,18 @@ public class DubboDocController {
         binder.registerCustomEditor(Date.class, new MyCustomDateEditor());
         binder.registerCustomEditor(LocalDate.class, new CustomLocalDateEditor());
         binder.registerCustomEditor(LocalDateTime.class, new CustomLocalDateTimeEditor());
+    }
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 为 DubboUtil 设置超时和重试次数
+     * @Date 2020/4/3 12:32
+     * @param:
+     * @return void
+     */
+    @PostConstruct
+    public void setRetriesAndTimeout(){
+        DubboUtil.setRetriesAndTimeout(retries, timeout);
     }
 
     @ApiOperation(value = "请求dubbo接口", notes = "请求dubbo接口", httpMethod = "POST", produces = "application/json")

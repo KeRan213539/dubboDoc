@@ -6,3 +6,6 @@ spring:
 dubbo:
   reference:
     heartbeat: 1000
+  consumer:
+    timeout: 10000
+    retries: 0

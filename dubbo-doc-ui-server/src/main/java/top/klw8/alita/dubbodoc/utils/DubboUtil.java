@@ -39,6 +39,18 @@ public class DubboUtil {
 
     private static final ExecutorService executor;
 
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 默认重试次数
+     */
+    private static int retries = 2;
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: 默认超时
+     */
+    private static int timeout = 1000;
+
     static{
         // T(线程数) = N(服务器内核数) * u(期望cpu利用率) * （1 + E(等待时间)/C(计算时间));
         executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 40 * (1 + 5 / 2));
@@ -46,6 +58,11 @@ public class DubboUtil {
         application.setName("alita-dubbo-debug-tool");
         registryConfigCache = new ConcurrentHashMap<>();
         referenceCache = new ConcurrentHashMap<>();
+    }
+
+    public static void setRetriesAndTimeout(int retries, int timeout){
+        DubboUtil.retries = retries;
+        DubboUtil.timeout = timeout;
     }
 
     /**
@@ -78,6 +95,8 @@ public class DubboUtil {
         ReferenceConfig<GenericService> referenceConfig = referenceCache.get(address + "/" + interfaceName);
         if (null == referenceConfig) {
             referenceConfig = new ReferenceConfig<>();
+            referenceConfig.setRetries(retries);
+            referenceConfig.setTimeout(timeout);
             referenceConfig.setApplication(application);
             if(address.startsWith("dubbo")){
                 referenceConfig.setUrl(address);
