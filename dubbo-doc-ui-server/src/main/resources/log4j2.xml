@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="600" shutdownHook="disable">
     <Properties>
-        <!-- 定义日志文件根目录 -->
         <Property name="logDir" value="/home/weihu/deploy/logs/dubbo-doc/" />
-        <!-- 定义日志的通用格式 -->
         <Property name="genericPattern" value="[dubboDoc]-%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
-        <!-- 定义日志分卷文件通用文件名形式 -->
         <Property name="genericFilePattern" value="%d{yyyy-MM-dd HH:mm}-%i" />
     </Properties>
-    <!-- appender们的定义 -->
     <Appenders>
-        <!-- 定义一个console类型定定义，如果需要，可以以这个为原型粘贴复制修改再定义适合自己的 -->
         <Console name="consoleAppender" target="SYSTEM_OUT">
             <PatternLayout pattern="${genericPattern}" />
         </Console>
 
     </Appenders>
-    <!-- 定义logger们 -->
     <Loggers>
-        <!-- 定义根logger，根logger是必须的，这里我把根logger定义为异步的，也可为定义为普通的同步的，但是注意在同步根logger和异步根logger中只能存在一个，不能两个都配置 -->
         <asyncRoot level="INFO">
             <AppenderRef ref="consoleAppender" />
         </asyncRoot>
 
-        <!-- 指定包的日志级别  ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF.-->
         <logger name="org.springframework" level="ERROR" />
         <logger name="com.alibaba" level="ERROR" />
         <logger name="org.apache" level="ERROR" />

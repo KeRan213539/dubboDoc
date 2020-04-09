@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package top.klw8.alita.dubbodoc.controller;
 
 import com.alibaba.fastjson.JSON;
@@ -16,7 +29,7 @@ import top.klw8.alita.dubbodoc.controller.vo.CallDubboServiceRequest;
 import top.klw8.alita.dubbodoc.controller.vo.CallDubboServiceRequestInterfacePrarm;
 import top.klw8.alita.dubbodoc.editor.CustomLocalDateEditor;
 import top.klw8.alita.dubbodoc.editor.CustomLocalDateTimeEditor;
-import top.klw8.alita.dubbodoc.editor.MyCustomDateEditor;
+import top.klw8.alita.dubbodoc.editor.CustomDateEditor;
 import top.klw8.alita.dubbodoc.utils.DubboUtil;
 
 import javax.annotation.PostConstruct;
@@ -31,7 +44,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboDocController
- * @Description: dubbo doc接口
+ * @Description: dubbo doc ui server api
  * @date 2019/9/19 17:21
  */
 @Api(tags = {"alita-restful-API--demoAPI"})
@@ -42,20 +55,20 @@ public class DubboDocController {
 
     private static final SimplePropertyPreFilter CLASS_NAME_PRE_FILTER = new SimplePropertyPreFilter(HashMap.class);
     static {
-        // 去除返回结果中的 class 属性
+        // Remove the "class" attribute from the returned result
         CLASS_NAME_PRE_FILTER.getExcludes().add("class");
     }
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 默认重试次数
+     * @Description: retries for dubbo provider
      */
     @Value("${dubbo.consumer.retries:2}")
     private int retries;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 默认超时
+     * @Description: timeout
      */
     @Value("${dubbo.consumer.timeout:1000}")
     private int timeout;
@@ -63,14 +76,14 @@ public class DubboDocController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-        binder.registerCustomEditor(Date.class, new MyCustomDateEditor());
+        binder.registerCustomEditor(Date.class, new CustomDateEditor());
         binder.registerCustomEditor(LocalDate.class, new CustomLocalDateEditor());
         binder.registerCustomEditor(LocalDateTime.class, new CustomLocalDateTimeEditor());
     }
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 为 DubboUtil 设置超时和重试次数
+     * @Description: Set timeout and retries for {@link top.klw8.alita.dubbodoc.utils.DubboUtil}
      * @Date 2020/4/3 12:32
      * @param:
      * @return void
@@ -80,7 +93,7 @@ public class DubboDocController {
         DubboUtil.setRetriesAndTimeout(retries, timeout);
     }
 
-    @ApiOperation(value = "请求dubbo接口", notes = "请求dubbo接口", httpMethod = "POST", produces = "application/json")
+    @ApiOperation(value = "request dubbo api", notes = "request dubbo api", httpMethod = "POST", produces = "application/json")
     @PostMapping("/requestDubbo")
     public Mono<String> callDubboService(CallDubboServiceRequest dubboCfg, @RequestBody List<CallDubboServiceRequestInterfacePrarm> methodPrarms){
         String[] prarmTypes = null;
@@ -96,13 +109,10 @@ public class DubboDocController {
         }
         CompletableFuture<Object> future = DubboUtil.invoke(dubboCfg.getRegistryCenterUrl(), dubboCfg.getInterfaceClassName(),
                 dubboCfg.getMethodName(), dubboCfg.isAsync(), prarmTypes, prarmValues);
-        return Mono.fromFuture(future).map( o -> {
-            // 去除dubbo泛化调用附加的"class"属性
-            return JSON.toJSONString(o, CLASS_NAME_PRE_FILTER);
-        });
+        return Mono.fromFuture(future).map( o -> JSON.toJSONString(o, CLASS_NAME_PRE_FILTER));
     }
 
-    @ApiOperation(value = "获取全部Module的基本信息,不包含api参数信息", notes = "获取全部Module的基本信息,不包含api参数信息", httpMethod = "GET", produces = "application/json")
+    @ApiOperation(value = "Get basic information of all modules, excluding API parameter information", notes = "Get basic information of all modules, excluding API parameter information", httpMethod = "GET", produces = "application/json")
     @GetMapping("/apiModuleList")
     public Mono<String> apiModuleList(ApiInfoRequest apiInfoRequest){
         CallDubboServiceRequest req = new CallDubboServiceRequest();
@@ -113,7 +123,7 @@ public class DubboDocController {
         return callDubboService(req, null);
     }
 
-    @ApiOperation(value = "获取指定API的参数信息", notes = "获取指定API的参数信息", httpMethod = "GET", produces = "application/json")
+    @ApiOperation(value = "Get the parameter information of the specified API", notes = "Get the parameter information of the specified API", httpMethod = "GET", produces = "application/json")
     @GetMapping("/apiParamsResp")
     public Mono<String> apiParamsResp(ApiInfoRequest apiInfoRequest){
         CallDubboServiceRequest req = new CallDubboServiceRequest();

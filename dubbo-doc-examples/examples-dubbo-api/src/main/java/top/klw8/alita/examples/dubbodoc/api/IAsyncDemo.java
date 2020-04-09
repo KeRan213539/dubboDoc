@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package top.klw8.alita.examples.dubbodoc.api;
 
 import top.klw8.alita.examples.dubbodoc.params.DemoParamBean1;
@@ -11,14 +24,14 @@ import java.util.concurrent.CompletableFuture;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: IAsyncDemo
- * @Description: 异步demo
+ * @Description: asynchronous demo
  * @date 2020/3/16 9:30
  */
 public interface IAsyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 入参出参都是bean
+     * @Description: request and response parameters are beans
      * @Date 2020/2/4 0:01
      * @param: param
      * @return top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1
@@ -27,37 +40,37 @@ public interface IAsyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试Map不带泛型
+     * @Description: Map without generics
      */
     CompletableFuture<Map> demoApi6();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试Map泛型为Object
+     * @Description: Map generic with Object
      */
     CompletableFuture<Map<Object, Object>> demoApi7();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试List不带泛型
+     * @Description: List without generics
      */
     CompletableFuture<List> demoApi10();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试List泛型为Object
+     * @Description: List generic with Object
      */
     CompletableFuture<List<Object>> demoApi9();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试 Object
+     * @Description: Object
      */
     CompletableFuture<Object> demoApi8();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试 Integer
+     * @Description: Integer
      */
     CompletableFuture<Integer> demoApi11();
 

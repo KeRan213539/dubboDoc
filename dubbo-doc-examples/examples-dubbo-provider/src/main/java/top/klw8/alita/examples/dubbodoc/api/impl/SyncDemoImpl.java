@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package top.klw8.alita.examples.dubbodoc.api.impl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,28 +30,28 @@ import java.util.Map;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DemoApiImpl
- * @Description: 同步demo实现
+ * @Description: Synchronous demo implementation
  * @date 2020/2/3 2:03
  */
 @Slf4j
 @Service
-@DubboApiModule(value = "同步demo", apiInterface = ISyncDemo.class)
+@DubboApiModule(value = "Synchronous demo", apiInterface = ISyncDemo.class)
 public class SyncDemoImpl implements ISyncDemo {
 
-    @DubboApi("入参出参都是bean")
+    @DubboApi("request and response parameters are beans")
     @Override
     public DemoRespBean1 demoApi1(DemoParamBean1 param1, DemoParamBean2 param2) {
         log.info("called demoApi1");
         DemoRespBean1 result = new DemoRespBean1();
         result.setCode("123456789");
-        result.setMessage("called demoApi1");
-        result.setMessage2("demoApi1 被打了");
+        result.setMessage("called demoApi1 msg1");
+        result.setMessage2("called demoApi1 msg2");
         return result;
     }
 
-    @DubboApi(value = "入参出参都是String", responseClassDescription="一串字符串")
+    @DubboApi(value = "request and response parameters are Strings", responseClassDescription="A string")
     @Override
-    public String demoApi2(@RequestParam(value = "参数1", required = true) String prarm1, String prarm2) {
+    public String demoApi2(@RequestParam(value = "Parameter 1", required = true) String prarm1, String prarm2) {
         log.info(" called demoApi2");
         return "demoApi2";
     }
@@ -48,13 +61,13 @@ public class SyncDemoImpl implements ISyncDemo {
         return null;
     }
 
-    @DubboApi(value = "无参接口", responseClassDescription="一串字符串")
+    @DubboApi(value = "Nonparametric method with Dubbo doc annotation", responseClassDescription="A string")
     @Override
     public String demoApi4() {
         return "asdfasdfsdafds";
     }
 
-    @DubboApi(value = "响应带泛型", responseClassDescription="响应带泛型")
+    @DubboApi(value = " Use generics in response", responseClassDescription=" Use generics in response")
     public BaseResponse<DemoRespBean1> demoApi5(){
         BaseResponse<DemoRespBean1> response = new BaseResponse<>();
         DemoRespBean1 responseData = new DemoRespBean1();
@@ -68,31 +81,31 @@ public class SyncDemoImpl implements ISyncDemo {
     }
 
     @Override
-    @DubboApi(value = "测试Map不带泛型", responseClassDescription="Map不带泛型")
+    @DubboApi(value = "Map without generics", responseClassDescription="Map without generics")
     public Map demoApi6() {
         return null;
     }
 
     @Override
-    @DubboApi(value = "测试Map泛型为Object", responseClassDescription="Map泛型为Object")
+    @DubboApi(value = "Map generic with Object", responseClassDescription="Map generic with Object")
     public Map<Object, Object> demoApi7() {
         return null;
     }
 
     @Override
-    @DubboApi(value = "测试List不带泛型", responseClassDescription="List不带泛型")
+    @DubboApi(value = "List without generics", responseClassDescription="List without generics")
     public List demoApi10() {
         return null;
     }
 
     @Override
-    @DubboApi(value = "测试List泛型为Object", responseClassDescription="List泛型为Object")
+    @DubboApi(value = "List generic with Object", responseClassDescription="List generic with Object")
     public List<Object> demoApi9() {
         return null;
     }
 
     @Override
-    @DubboApi(value = "测试 Object", responseClassDescription="Object")
+    @DubboApi(value = "Object", responseClassDescription="Object")
     public Object demoApi8() {
         return null;
     }

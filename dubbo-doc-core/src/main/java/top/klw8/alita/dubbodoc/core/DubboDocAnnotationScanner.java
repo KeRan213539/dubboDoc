@@ -1,7 +1,19 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package top.klw8.alita.dubbodoc.core;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ProtocolConfig;
@@ -29,7 +41,7 @@ import java.util.*;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboDocAnnotationScanner
- * @Description: 扫描并处理dubbo doc 注解
+ * @Description: Scan and process dubbo doc annotations
  * @date 2020/2/2 18:26
  */
 @Slf4j
@@ -50,59 +62,53 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        // 注册dubbo doc 的提供者
+        // Register dubbo doc provider
         IDubboDocProvider dubboDocProvider = applicationContext.getBean(IDubboDocProvider.class);
         exportDubboService(IDubboDocProvider.class, dubboDocProvider, false);
 
-        // 并且是否异步根据Service注解里的来(在这里写死也可以, alita那边写死也可以,因为这样注册的就那几个服务而已)
-        log.info("================= Dubbo Doc--开始扫描并处理Dubbo Doc注解 ================");
+        log.info("================= Dubbo Doc--Start scanning and processing dubbo doc annotations ================");
 
         Map<String, Object> apiModules = applicationContext.getBeansWithAnnotation(DubboApiModule.class);
         apiModules.forEach((key, apiModule) -> {
-//            System.out.println("===================模块: "
-//                    + apiModule.getClass().getAnnotation(DubboApiModule.class).value()
-//                    + "【" + apiModule.getClass().getCanonicalName() + "】");
             DubboApiModule moduleAnn = apiModule.getClass().getAnnotation(DubboApiModule.class);
             if(!apiModule.getClass().isAnnotationPresent(Service.class)){
-                log.warn("【警告】{}使用了 @DubboApiModule 注解,但是它不是一个Dubbo提供者(没有使用{}注解)", apiModule.getClass().getName(), Service.class.getName());
+                log.warn("【Warning】{} @DubboApiModule annotation is used, but it is not a dubbo provider (without {} annotation)", apiModule.getClass().getName(), Service.class.getName());
                 return;
             }
             Service dubboService = apiModule.getClass().getAnnotation(Service.class);
             boolean async = dubboService.async();
             Map<String, Object> moduleCacheItem = new HashMap<>(4);
             DubboDocCache.addApiModule(moduleAnn.apiInterface().getCanonicalName(), moduleCacheItem);
-            //模块中文名称
+            //module name
             moduleCacheItem.put("moduleChName", moduleAnn.value());
-            //包含包路径的接口名
+            //interface name containing package path
             moduleCacheItem.put("moduleClassName", moduleAnn.apiInterface().getCanonicalName());
-            //模块版本
+            //module version
             moduleCacheItem.put("moduleVersion", moduleAnn.version());
 
             Method[] apiModuleMethods = apiModule.getClass().getMethods();
-            // 模块缓存中的api基本信息列表
+            // API basic information list in module cache
             List<Map<String, Object>> moduleApiList = new ArrayList<>(apiModuleMethods.length);
             moduleCacheItem.put("moduleApiList", moduleApiList);
             for(Method method : apiModuleMethods){
                 if(method.isAnnotationPresent(DubboApi.class)){
                     DubboApi dubboApi = method.getAnnotation(DubboApi.class);
 
-                    //                    System.out.println("    接口: " + dubboApi.value() + "【" + method.getName() + "】");
-
-                    // 模块中的api列表中的Api基本信息
+                    // API basic information in API list in module
                     Map<String, Object> apiListItem = new HashMap<>(4);
                     moduleApiList.add(apiListItem);
-                    //用于调用的接口名
+                    //API method name
                     apiListItem.put("apiName", method.getName());
-                    //接口中文名称
+                    //API name
                     apiListItem.put("apiChName", dubboApi.value());
-                    // 接口描述
+                    // API description
                     apiListItem.put("description", dubboApi.description());
-                    //接口版本
+                    //API version
                     apiListItem.put("apiVersion", dubboApi.version());
-                    //接口返回数据的说明
+                    //Description of API return data
                     apiListItem.put("apiRespDec", dubboApi.responseClassDescription());
 
-                    // 接口参数和响应信息
+                    // Interface parameters and response information
                     Map<String, Object> apiParamsAndResp = new HashMap<>(2);
                     DubboDocCache.addApiParamsAndResp(moduleAnn.apiInterface().getCanonicalName() + "." + method.getName(), apiParamsAndResp);
 
@@ -126,7 +132,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
                         prarmListItem.put("prarmType", argClass.getCanonicalName());
                         prarmListItem.put("prarmIndex", i);
                         RequestParam requestParam = null;
-                        // 处理参数上的 RequestParam 注解
+                        // Handling @RequestParam annotations on parameters
                         for(Annotation ann : argAnns) {
                             if (ann instanceof RequestParam){
                                 requestParam = (RequestParam)ann;
@@ -134,21 +140,20 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
                         }
                         ParamBean paramBean = this.processHtmlType(argClass, requestParam, null);
                         if(paramBean == null){
-                            // 不是基本类型,处理方法参数中的属性
-//                            List<ParamBean> apiParamsList = processField(argClass, 0);
+                            // Not a basic type, handling properties in method parameters
                             List<ParamBean> apiParamsList = processField(argClass);
                             if(apiParamsList != null && !apiParamsList.isEmpty()) {
                                 prarmListItem.put("prarmInfo", apiParamsList);
                             }
                         } else {
-                            // 是基本类型
+                            // Is the basic type
                             Parameter methodParameter = parameters[i];
                             prarmListItem.put("name", methodParameter.getName());
                             prarmListItem.put("htmlType", paramBean.getHtmlType().name());
                             prarmListItem.put("allowableValues", paramBean.getAllowableValues());
                             if(requestParam != null) {
 
-                                // 处理参数上的 RequestParam 注解
+                                // Handling requestparam annotations on parameters
                                 prarmListItem.put("nameCh", requestParam.value());
                                 prarmListItem.put("description", requestParam.description());
                                 prarmListItem.put("example", requestParam.example());
@@ -162,18 +167,18 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
                 }
             }
         });
-//        System.out.println(JSON.toJSONString(DubboDocCache.getApiParamsAndResp("top.klw8.alita.examples.dubbodoc.api.IDemoApi.demoApi5"), SerializerFeature.PrettyFormat));
-        log.info("================= Dubbo Doc--Dubbo Doc注解扫描并处理完毕 ================");
+        log.info("================= Dubbo Doc--Dubbo doc annotations scanning and processing completed ================");
     }
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 处理方法参数中的属性,只处理1层,更深层直接转json,更深层也最多处理5层
+     * @Description: For the attributes in the method parameters, only one layer is processed.
+     * The deeper layer is directly converted to JSON, and the deeper layer is up to 5 layers
      */
     private List<ParamBean> processField(Class<?> argClass) {
 
         List<ParamBean> apiParamsList = new ArrayList(16);
-        // 获取所有字段
+        // get all fields
         List<Field> allFields = ClassTypeUtils.getAllFields(null, argClass);
         for (Field field : allFields) {
             ParamBean paramBean = new ParamBean();
@@ -181,10 +186,8 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
             paramBean.setJavaType(field.getType().getCanonicalName());
             RequestParam requestParam = null;
             if(field.isAnnotationPresent(RequestParam.class)) {
-                // 处理属性上的 RequestParam 注解
+                // Handling @RequestParam annotations on properties
                 requestParam = field.getAnnotation(RequestParam.class);
-//                    System.out.println("            @有注解@: " + field.getName()
-//                            + "【" + field.getType().getCanonicalName() + "】" + requestParam.value());
                 paramBean.setNameCh(requestParam.value());
                 paramBean.setRequired(requestParam.required());
                 paramBean.setDescription(requestParam.description());
@@ -195,7 +198,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
             }
 
             if(this.processHtmlType(field.getType(), requestParam, paramBean) == null){
-                // 不是基本元素,处理成JSON
+                // Not a basic type, handle as JSON
                 Object objResult =  ClassTypeUtils.initClassTypeWithDefaultValue(field.getGenericType(), field.getType(), 0);
                 if(!ClassTypeUtils.isBaseType(objResult)){
                     paramBean.setHtmlType(HtmlTypeEnum.TEXT_AREA);
@@ -209,7 +212,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 判断该用什么 htmlType
+     * @Description: Determine what HTML form elements to use
      * @Date 2020/2/28 18:59
      * @param: classType
      * @param: annotation
@@ -223,9 +226,9 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
         if(annotation != null){
             prarm.setAllowableValues(annotation.allowableValues());
         }
-        // 是否有允许值
+        // Is there any allowed values
         boolean hasAllowableValues = (prarm.getAllowableValues() != null && prarm.getAllowableValues().length > 0);
-        // 是否已处理
+        // Processed or not
         boolean processed = false;
         if(Integer.class.isAssignableFrom(classType)){
             prarm.setHtmlType(HtmlTypeEnum.NUMBER_INTEGER);
@@ -253,24 +256,26 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
             processed = true;
         }
         if(processed){
-            // 处理过了,该返回了
+            // Processed, time to return
             if(hasAllowableValues) {
-                // 允许值有值,变成select
+                // Allowed values has value, change to select
                 prarm.setHtmlType(HtmlTypeEnum.SELECT);
             }
             return prarm;
         }
 
-        // 还没处理过,继续
+        // haven't dealt with it. Go on
         if(Boolean.class.isAssignableFrom(classType)){
             prarm.setHtmlType(HtmlTypeEnum.SELECT);
-            // boolean 只有 true/false可选,不管之前的允许值是啥,强制替换
+            // Boolean can only be true / false. No matter what the previous allowed value is, it is forced to replace
             prarm.setAllowableValues(new String[]{"true", "false"});
             processed = true;
         } else if(Enum.class.isAssignableFrom(classType)){
+            // process enum
             prarm.setHtmlType(HtmlTypeEnum.SELECT);
             if(!hasAllowableValues){
-                // 如果没有可选值,从枚举里取. 有可选值的情况就不做可选值是否与枚举匹配的检查了,后面有必要再加
+                // If there is no optional value, it is taken from the enumeration.
+                //TODO If there is an optional value, it is necessary to check whether the optional value matches the enumeration. It is add it later
                 Object[] enumConstants = classType.getEnumConstants();
                 String[] enumAllowableValues = new String[enumConstants.length];
                 try {
@@ -292,88 +297,20 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
         return null;
     }
 
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: export dubbo service for dubbo doc
+     */
     private <I, T> void exportDubboService(Class<I> serviceClass, T serviceImplInstance, boolean async) {
-        ServiceConfig<T> service = new ServiceConfig<>(); // 此实例很重，封装了与注册中心的连接，请自行缓存，否则可能造成内存和连接泄漏
+        ServiceConfig<T> service = new ServiceConfig<>();
         service.setApplication(application);
-        service.setRegistry(registry); // 多个注册中心可以用setRegistries()
-        service.setProtocol(protocol); // 多个协议可以用setProtocols()
+        service.setRegistry(registry);
+        service.setProtocol(protocol);
         service.setInterface(serviceClass);
         service.setRef(serviceImplInstance);
         service.setAsync(async);
 //        service.setVersion("1.0.0");
-        service.export();// 暴露及注册服务
+        service.export();
     }
-
-    /**
-     * @author klw(213539@qq.com)
-     * @Description: 处理方法参数中的属性,最多5层
-     * @Date 2020/2/27 22:51
-     * @param: argClass
-     * @param: processCount
-     * @return java.util.List<top.klw8.alita.dubbodoc.core.beans.ParamBean>
-     */
-//    private List<ParamBean> processField(Class<?> argClass, int processCount) {
-//
-//        if(processCount >= 5){
-//            log.warn("使用Dubbo Doc的Bean的深度已超过5层,剩下的Dubbo Doc 注解将被忽略!请检查Bean中是否有循环引用!");
-//            return null;
-//        }
-//        processCount++;
-//
-//        if(ClassTypeUtils.isBaseType(argClass)){
-//            return null;
-//        }
-//
-//        List<ParamBean> apiParamsList = new ArrayList(16);
-//        // 获取所有字段
-//        List<Field> allFields = ClassTypeUtils.getAllFields(null, argClass);
-//        for (Field field : allFields) {
-//            ParamBean paramBean = new ParamBean();
-//            paramBean.setName(field.getName());
-//            paramBean.setJavaType(field.getType().getCanonicalName());
-//            if(field.isAnnotationPresent(RequestParam.class)) {
-//                // 处理属性上的 RequestParam 注解
-//                RequestParam requestParam = field.getAnnotation(RequestParam.class);
-////                    System.out.println("            @有注解@: " + field.getName()
-////                            + "【" + field.getType().getCanonicalName() + "】" + requestParam.value());
-//                paramBean.setNameCh(requestParam.value());
-//                paramBean.setDescription(requestParam.description());
-//                paramBean.setExample(requestParam.example());
-//                paramBean.setDefaultValue(requestParam.defaultValue());
-//// TODO            paramBean.setHtmlType();
-//                paramBean.setAllowableValues(requestParam.allowableValues());
-//            }
-//
-//            // 处理常用集合
-//            if (field.getType().isArray()) {
-//                Class<?> arrType = field.getType().getComponentType();
-//                List<ParamBean> tempList = processField(arrType, processCount);
-//                if(tempList != null && !tempList.isEmpty()) {
-//                    paramBean.setSubParams(tempList);
-//                }
-//            } else if (Collection.class.isAssignableFrom(field.getType())) {
-//                // 已经判断了是 集合 ,肯定有泛型
-//                ParameterizedType pt  = (ParameterizedType)field.getGenericType();
-//                List<ParamBean> tempList = processField((Class<?>) pt.getActualTypeArguments()[0], processCount);
-//                if(tempList != null && !tempList.isEmpty()) {
-//                    paramBean.setSubParams(tempList);
-//                }
-//            } else if (Map.class.isAssignableFrom(field.getType())) {
-//                // 已经判断了是 Map ,肯定有泛型
-//                ParameterizedType pt  = (ParameterizedType)field.getGenericType();
-//                List<ParamBean> tempList = processField((Class<?>) pt.getActualTypeArguments()[1], processCount);
-//                if(tempList != null && !tempList.isEmpty()) {
-//                    paramBean.setSubParams(tempList);
-//                }
-//            } else {
-//                List<ParamBean> tempList = processField(field.getType(), processCount);
-//                if(tempList != null && !tempList.isEmpty()) {
-//                    paramBean.setSubParams(tempList);
-//                }
-//            }
-//            apiParamsList.add(paramBean);
-//        }
-//        return apiParamsList;
-//    }
 
 }

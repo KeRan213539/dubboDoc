@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package top.klw8.alita.dubbodoc.core;
 
 import com.alibaba.fastjson.JSON;
@@ -11,16 +24,16 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboDocCache
- * @Description: dubbo doc 缓存
+ * @Description: dubbo doc cache
  * @date 2020/2/29 19:46
  */
 public class DubboDocCache {
 
-    // 模块缓存
+    // module cache
     private static Map<String, Map<String, Object>> apiModulesCache = new ConcurrentHashMap<>(16);
     private static Map<String, String> apiModulesStrCache = new ConcurrentHashMap<>(16);
 
-    // 模块中的接口详细信息缓存
+    // API details cache in module
     private static Map<String, Map<String, Object>> apiParamsAndRespCache = new ConcurrentHashMap<>(16);
     private static Map<String, String> apiParamsAndRespStrCache = new ConcurrentHashMap<>(16);
 

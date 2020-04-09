@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package top.klw8.alita.examples.dubbodoc.api;
 
 import top.klw8.alita.examples.dubbodoc.params.DemoParamBean1;
@@ -11,14 +24,14 @@ import java.util.Map;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: ISyncDemo
- * @Description: 同步demo
+ * @Description: synchronization demo
  * @date 2020/2/2 23:41
  */
 public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 入参出参都是bean
+     * @Description: request and response parameters are beans
      * @Date 2020/2/4 0:01
      * @param: param
      * @return top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1
@@ -27,7 +40,7 @@ public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 入参出参都是String
+     * @Description: request and response parameters are Strings
      * @Date 2020/2/4 0:02
      * @param: prarm1
      * @param: prarm2
@@ -37,7 +50,7 @@ public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 没有 dubbo doc 注解的方法,不会生成文档
+     * @Description: Without Dubbo doc annotation, no document will be generated
      * @Date 2020/2/4 0:22
      * @param: prarm1
      * @return java.lang.String
@@ -46,7 +59,7 @@ public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 有 dubbo doc 注解的无参方法
+     * @Description: Nonparametric method with Dubbo doc annotation
      * @Date 2020/2/4 0:02
      * @param:
      * @return java.lang.String
@@ -55,37 +68,37 @@ public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试响应中使用泛型
+     * @Description: Use generics in response
      */
     BaseResponse<DemoRespBean1> demoApi5();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试Map不带泛型
+     * @Description: Map without generics
      */
     Map demoApi6();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试Map泛型为Object
+     * @Description: Map generic with Object
      */
     Map<Object, Object> demoApi7();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试List不带泛型
+     * @Description: List without generics
      */
     List demoApi10();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试List泛型为Object
+     * @Description: List generic with Object
      */
     List<Object> demoApi9();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 测试 Object
+     * @Description: Object
      */
     Object demoApi8();
 

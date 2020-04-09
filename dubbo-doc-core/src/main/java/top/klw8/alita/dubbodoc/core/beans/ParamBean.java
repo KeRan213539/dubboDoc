@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package top.klw8.alita.dubbodoc.core.beans;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -9,7 +22,7 @@ import java.util.List;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: ParamBean
- * @Description: 参数信息Bean
+ * @Description: Parameter bean corresponding to {@link top.klw8.alita.dubbodoc.annotations.RequestParam}, for caching
  * @date 2020/2/27 18:33
  */
 @Getter
@@ -18,68 +31,71 @@ public class ParamBean {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 参数名称
+     * @Description: parameter name
      */
     private String name;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 参数中文名称
+     * @Description: parameter name, for display
      */
     private String nameCh;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 是否必须
+     * @Description: required
      */
     private Boolean required;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 描述
+     * @Description: description
      */
     private String description;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 示例
+     * @Description: example
      */
     private String example;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 默认值
+     * @Description: default value
      */
     private String defaultValue;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 参数的java类型
+     * @Description: java type of parameter
      */
     private String javaType;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 该参数在页面上应该以什么html元素显示
+     * @Description: What HTML elements should this parameter display
      */
     private HtmlTypeEnum htmlType;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 允许的值
+     * @Description: allowed values
      */
     private String[] allowableValues;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 如果一个RequestBean中的属性不是基本数据类型, 则此属性会有值,由于html表单不好展示此参数,将以文本域方式展示,填入该参数的json
+     * @Description: If the parameter in a request bean is not a basic data type,
+     * the {@link subParams} will have a value.
+     * Because the HTML form is not easy to display this parameter,
+     * it will be displayed as a text area, and the JSON string of this parameter will be filled in
      */
     @JSONField(serialize = false)
     private List<ParamBean> subParams;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 对应 subParams 的json, subParams 可能为空
+     * @Description: JSON string corresponding to {@link subParams}
      */
     private String subParamsJson;
 

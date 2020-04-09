@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package top.klw8.alita.examples.dubbodoc.params;
 
 import lombok.Getter;
@@ -7,22 +20,22 @@ import top.klw8.alita.dubbodoc.annotations.RequestParam;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DemoParamBean1SubBean1
- * @Description: DemoParamBean1 中的属性Bean
+ * @Description: Attribute bean in DemoParamBean1
  * @date 2020/2/26 16:38
  */
 @Getter
 @Setter
 public class DemoParamBean1SubBean1 {
 
-    @RequestParam("子Bean姓名")
+    @RequestParam("Sub Name")
     private String subName;
 
-    @RequestParam("子Bean年龄")
+    @RequestParam("Sub Age")
     private Integer subAge;
 
     private TestEnum testEnum;
 
-    // 测试循环引用
+    // Circular reference for test
 //    @RequestParam("====bean")
 //    private DemoParamBean1 bean;
 

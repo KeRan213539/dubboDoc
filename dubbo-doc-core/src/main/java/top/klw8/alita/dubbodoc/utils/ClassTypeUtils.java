@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package top.klw8.alita.dubbodoc.utils;
 
 import com.alibaba.fastjson.JSON;
@@ -17,27 +30,31 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * @author klw(213539 @ qq.com)
- * @ClassName: JSONUtils
- * @Description: java class 工具类, dubbo doc专用
+ * @ClassName: ClassTypeUtils
+ * @Description: Java class tool class, special for Dubbo doc
  * @date 2020/2/28 9:30
  */
 @Slf4j
 public class ClassTypeUtils {
 
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: fastjson features
+     */
     public static SerializerFeature[] FAST_JSON_FEATURES = {
-            //是否输出值为null的字段,默认为false。
+            //Whether to output the field with null value. The default value is false.
             SerializerFeature.WriteMapNullValue,
-            //List字段如果为null,输出为[],而非null
+            //If the list field is null, the output is [], not null
             SerializerFeature.WriteNullListAsEmpty,
-            //字符类型字段如果为null,输出为"",而非null
+            //If the character type field is null, the output is' ', not null
             SerializerFeature.WriteNullStringAsEmpty,
-            //Boolean字段如果为null,输出为false,而非null
+            //If the Boolean field is null, the output is false instead of null
             SerializerFeature.WriteNullBooleanAsFalse,
-            // 数字为null输出0
+            // Null number output 0
             SerializerFeature.WriteNullNumberAsZero,
-            //消除对同一对象循环引用的问题，默认为false（如果不配置有可能会进入死循环）
+            //Eliminate the problem of circular reference to the same object. The default value is false (it may enter a dead cycle if not configured)
             SerializerFeature.DisableCircularReferenceDetect,
-            // 使用 .name() 处理枚举
+            // Use. Name() to handle enumeration
             SerializerFeature.WriteEnumUsingName
     };
 
@@ -48,11 +65,11 @@ public class ClassTypeUtils {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 根据 Class 实例化
+     * @Description: Instantiate class and its fields
      */
     public static Object initClassTypeWithDefaultValue(Type genericType, Class<?> classType, int processCount) {
         if(processCount >= 10){
-            log.warn("参数Bean的深度已超过10层,将忽略更深层!请修改参数结构或者检查Bean中是否有循环引用!");
+            log.warn("The depth of bean has exceeded 10 layers, the deeper layer will be ignored! Please modify the parameter structure or check whether there is circular reference in bean!");
             return null;
         }
         processCount++;
@@ -122,7 +139,7 @@ public class ClassTypeUtils {
             }
             return map;
         } else if (CompletableFuture.class.isAssignableFrom(classType)) {
-            // CompletableFuture
+            // process CompletableFuture
             if(genericType == null){
                 return null;
             }
@@ -145,7 +162,7 @@ public class ClassTypeUtils {
                     subClassArray[i] = Class.forName(subTypeNamesArray[i].trim());
                 }
             } catch (ClassNotFoundException e) {
-                log.warn("获取 CompletableFuture 中的泛型发生异常", e);
+                log.warn("Exception getting generics in completabilefuture", e);
                 return null;
             }
             ParameterizedType pt2 = ParameterizedTypeImpl.make(typeClass, subClassArray, null);
@@ -153,7 +170,7 @@ public class ClassTypeUtils {
         }
 
         Map<String, Object> result = new HashMap<>(16);
-        // 获取所有字段
+        // get all fields
         List<Field> allFields = getAllFields(null, classType);
         for (Field field2 : allFields) {
             if(String.class.isAssignableFrom(field2.getType())){
@@ -164,32 +181,30 @@ public class ClassTypeUtils {
                     ResponseProperty responseProperty = field2.getAnnotation(ResponseProperty.class);
                     StringBuilder strValue = new StringBuilder(responseProperty.value());
                     if(StringUtils.isNotBlank(responseProperty.example())){
-                        strValue.append("【如: ").append(responseProperty.example()).append("】");
+                        strValue.append("【example: ").append(responseProperty.example()).append("】");
                     }
                     result.put(field2.getName(), strValue.toString());
                 } else {
-                    // 是string,但是没有注解
+                    // It's string, but there's no annotation
                     result.put(field2.getName(), initClassTypeWithDefaultValue(field2.getGenericType(), field2.getType(), processCount));
                 }
             } else {
-                // 检查该属性的类型是否是泛型
+                // Check if the type of the property is generic
                 if("T".equals(field2.getGenericType().getTypeName())) {
-                    // 该属性的类型是泛型,从该属性所在的Class的定义中找泛型
+                    // The type of the attribute is generic. Find the generic from the definition of the class in which the attribute is located
                     ParameterizedType pt = (ParameterizedType) genericType;
                     Type[] actualTypeArguments = pt.getActualTypeArguments();
                     if(actualTypeArguments.length > 0) {
-                        // 找到了
                         if(actualTypeArguments.length == 1) {
                             result.put(field2.getName(), initClassTypeWithDefaultValue(field2.getGenericType(), (Class<?>) pt.getActualTypeArguments()[0], processCount));
                         } else {
-                            log.warn("{}#{}的泛型暂不支持,该属性将被忽略",classType.getName(), field2.getName());
+                            log.warn("{}#{} generics are not supported temporarily. This property will be ignored",classType.getName(), field2.getName());
                         }
                     } else {
-                        // 找不到
                         result.put(field2.getName(), initClassTypeWithDefaultValue(field2.getGenericType(), field2.getType(), processCount));
                     }
                 } else {
-                    // 不是泛型
+                    // Not generic
                     result.put(field2.getName(), initClassTypeWithDefaultValue(field2.getGenericType(), field2.getType(), processCount));
                 }
             }
@@ -199,23 +214,8 @@ public class ClassTypeUtils {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 检查是否基础数据类型
+     * @Description: Check basic data type
      */
-    public static boolean isBaseType(Class<?> clasz) {
-        if (clasz.equals(java.lang.Integer.class) ||
-                clasz.equals(java.lang.Byte.class) ||
-                clasz.equals(java.lang.Long.class) ||
-                clasz.equals(java.lang.Double.class) ||
-                clasz.equals(java.lang.Float.class) ||
-                clasz.equals(java.lang.Character.class) ||
-                clasz.equals(java.lang.Short.class) ||
-                clasz.equals(java.lang.Boolean.class) ||
-                clasz.equals(java.lang.String.class)) {
-            return true;
-        }
-        return false;
-    }
-
     public static boolean isBaseType(Object o) {
         if (o instanceof java.lang.Integer ||
         o instanceof java.lang.Byte||
@@ -236,16 +236,16 @@ public class ClassTypeUtils {
      * @param classz
      * @return
      * @Title: getAllFields
-     * @Description: 获取类中的所有属性
+     * @Description: Get all fields in the class
      */
     public static List<Field> getAllFields(List<Field> fieldList, Class<?> classz) {
         if (classz == null) {
             return fieldList;
         }
         if (fieldList == null) {
-            fieldList = new ArrayList<>(Arrays.asList(classz.getDeclaredFields()));  // 获得该类的所有字段,但不包括父类的
+            fieldList = new ArrayList<>(Arrays.asList(classz.getDeclaredFields()));
         } else {
-            CollectionUtils.addAll(fieldList, classz.getDeclaredFields()); // 获得该类的所有字段,但不包括父类的
+            CollectionUtils.addAll(fieldList, classz.getDeclaredFields());
         }
         return getAllFields(fieldList, classz.getSuperclass());
     }
