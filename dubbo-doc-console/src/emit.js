@@ -9,16 +9,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- .footer {
-  line-height: 20px;
-  text-align: center;
-}
-
-.logo {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.copyright {
-  font-size: 12px;
-}
+const EventEmitter = require('events').EventEmitter;
+ 
+const emit = new EventEmitter(); 
+export { emit };

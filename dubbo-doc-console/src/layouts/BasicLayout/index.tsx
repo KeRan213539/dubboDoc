@@ -1,8 +1,22 @@
-import React, { useState, useEffect } from 'react';
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import React, { useState } from 'react';
 import { Shell, Input, Button } from '@alifd/next';
 import PageNav from './components/PageNav';
 import Footer from './components/Footer';
 import { request } from 'ice';
+import { LANGUAGE_KEY, LANGUAGE_SWITCH } from '../../constants';
+import { emit } from '../../emit.js'
+import intl from 'react-intl-universal';
 
 export default function BasicLayout(props: {
   children: React.ReactNode;
@@ -10,14 +24,13 @@ export default function BasicLayout(props: {
 }) {
   const { children, pathname } = props;
 
-
   const [dubboIp, setDubboIp] = useState('127.0.0.1');
 
   const [dubboPort, setDubboPort] = useState('20881');
 
   const [menuData4Nav, setData4Nav] = useState(new Array());
 
-
+  const locale = intl.get('basicLayout');
 
   async function loadMenus(){
     const response = await request({
@@ -62,6 +75,13 @@ export default function BasicLayout(props: {
     setData4Nav(resultData);
   }
 
+  function switchLanguage() {
+    let currLang = localStorage.getItem(LANGUAGE_KEY);
+    let langChangeTo = currLang === 'zh-CN' ? 'en-US' : 'zh-CN';
+    localStorage.setItem(LANGUAGE_KEY, langChangeTo);
+    emit.emit(LANGUAGE_SWITCH, langChangeTo);
+  }
+
   return (
     <Shell
       type="dark"
@@ -69,10 +89,17 @@ export default function BasicLayout(props: {
         minHeight: '100vh',
       }}
     >
-      <Shell.Branding>
+      <Shell.Branding style={{width: '100%'}}>
         <div style={{float: 'left', width: '200px'}}>Dubbo Doc</div>
-        <div style={{float: 'right'}}>
-          <span>Dubbo 提供者Ip:</span>
+        <div style={{ float: 'right'}}>
+          <span className='language-switch'
+            onClick={ switchLanguage }
+          >
+            {locale.switchLocale}
+          </span>
+        </div>
+        <div style={{float: 'right', marginLeft: '30px'}}>
+          <span>{locale.dubboProviderIP}</span>
           <Input
             htmlType={'text'}
             style={{ marginLeft: 5, width: 200 }}
@@ -80,7 +107,7 @@ export default function BasicLayout(props: {
             value={dubboIp}
             onChange={setDubboIp}
           />
-          <span style={{ marginLeft: 10 }}>Dubbo 提供者端口:</span>
+          <span style={{ marginLeft: 10 }}>{locale.dubboProviderPort}</span>
           <Input
             htmlType={'number'}
             style={{ marginLeft: 5, width: 80 }}
@@ -93,7 +120,7 @@ export default function BasicLayout(props: {
             style={{ marginLeft: 10 }}
             onClick={ loadMenus }
           >
-            加载接口列表
+            {locale.loadApiList}
           </Button>
         </div>
       </Shell.Branding>
@@ -102,7 +129,7 @@ export default function BasicLayout(props: {
         <PageNav pathname={pathname} menuData={menuData4Nav} />
       </Shell.Navigation>
 
-      <Shell.Content>{children}</Shell.Content>
+    <Shell.Content>{children}</Shell.Content>
       <Shell.Footer>
         <Footer />
       </Shell.Footer>

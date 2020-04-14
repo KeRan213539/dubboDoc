@@ -14,6 +14,7 @@
     "prop-types": "^15.5.8",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
+    "react-intl-universal": "^2.2.5",
     "react-json-view": "^1.19.1"
   },
   "devDependencies": {

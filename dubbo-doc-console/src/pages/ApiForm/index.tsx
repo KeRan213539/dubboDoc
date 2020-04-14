@@ -1,3 +1,14 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import React from 'react';
 import { request } from 'ice';
 import {
@@ -9,16 +20,25 @@ import {
   Loading,
   Select,
 } from '@alifd/next';
-import $ from 'jquery'
-import ReactJson from 'react-json-view'
+import $ from 'jquery';
+import ReactJson from 'react-json-view';
+import intl from 'react-intl-universal';
+import { emit } from '../../emit.js'
+import { LANGUAGE_SWITCH_ALL_PAGE } from '../../constants';
 
 class ApiForm extends React.Component {
 
   constructor(props) {
     super(props);
-
+    // language changes and process listener
+    emit.on(LANGUAGE_SWITCH_ALL_PAGE, () => {
+      this.setState({
+        locale: intl.get('apiForm'),
+      });
+    });
     var params = new URLSearchParams(this.props.location.search);
     this.state = {
+      locale: intl.get('apiForm'),
       loading: true,
       apiName: params.get('apiName'),
       dubboIp: params.get('dubboIp'),
@@ -26,9 +46,9 @@ class ApiForm extends React.Component {
       apiClassName: '',
       apiFunctionName: '',
       apiInfoData:{},
-      buildResponseInfo: false,  // 是否渲染返回描述
+      buildResponseInfo: false,  // Whether to render return description
       responseInfo: '',
-      buildResponseData: false,  // 是否渲染接口返回内容
+      buildResponseData: false,  // Whether to render interface return content
       responseData: '',
     };
 
@@ -37,13 +57,13 @@ class ApiForm extends React.Component {
     let dubboPort = this.state.dubboPort;
     if(!apiName || apiName == '' || !dubboIp || dubboIp == '' || !dubboPort || dubboPort == ''){
       Dialog.alert({
-        title: '缺少接口信息',
+        title: this.state.locale.missingInterfaceInfo,
         style: {
           width: '60%',
         },
         content: (
             <div style={{ fontSize: '15px', lineHeight: '22px' }}>
-              缺少接口信息
+              {this.state.locale.missingInterfaceInfo}
             </div>
         ),
       });
@@ -59,7 +79,7 @@ class ApiForm extends React.Component {
         apiName: this.state.apiName
       },
     }).catch(error => {
-      Message.error('获取接口信息异常');
+      Message.error(this.state.locale.getApiInfoErr);
       console.log(error);
     }).then(response => {
       if(response && response != ''){
@@ -75,19 +95,20 @@ class ApiForm extends React.Component {
         });
       } else {
         Dialog.alert({
-          title: '接口名称不正确,没有查找到接口参数和响应信息',
+          title: this.state.locale.api404Err,
           style: {
             width: '60%',
           },
           content: (
               <div style={{ fontSize: '15px', lineHeight: '22px' }}>
-                接口名称不正确,没有查找到接口参数和响应信息
+                {this.state.locale.api404Err}
               </div>
           ),
         });
       }
     });
   }
+
 
   loadApiInfoAndBuildForm(){
     if(!this.state.loading){
@@ -97,7 +118,7 @@ class ApiForm extends React.Component {
       for(var i = 0; i < params.length; i++){
         var paramItem = params[i];
         if(paramItem.htmlType){
-          // 有 htmlType ,说明是个基础类型
+          // Has htmlType, that's a basic type
           var formItem = new Map();
           formItem.set('name', paramItem.name);
           formItem.set('htmlType', paramItem.htmlType);
@@ -112,7 +133,7 @@ class ApiForm extends React.Component {
           formItem.set('required', paramItem.required);
           formsArray.push(formItem);
         } else {
-          // 没有 htmlType, 说明是个对象
+          // No htmltype, that's an object
           var prarmInfoArray = paramItem.prarmInfo;
           for(var j = 0; j < prarmInfoArray.length; j++){
             var prarmInfoItem = prarmInfoArray[j];
@@ -138,7 +159,7 @@ class ApiForm extends React.Component {
           <Form>
             <Form.Item
               key='formItemAsync'
-              label='是否异步调用(此参数不可修改,根据接口定义的是否异步显示)'>
+              label={this.state.locale.isAsyncFormLabel}>
               <Select 
                 id='formItemAsync'
                 name='formItemAsync'
@@ -152,7 +173,7 @@ class ApiForm extends React.Component {
             </Form.Item>
             <Form.Item
               key='apiClassName'
-              label='接口模块(此参数不可修改)'>
+              label={this.state.locale.apiModuleFormLabel}>
               <Input
                 id='apiClassName'
                 htmlType={'text'}
@@ -164,7 +185,7 @@ class ApiForm extends React.Component {
             </Form.Item>
             <Form.Item
               key='apiFunctionName'
-              label='接口方法名(此参数不可修改)'>
+              label={this.state.locale.apiModuleFormLabel}>
               <Input
                 id='apiFunctionName'
                 htmlType={'text'}
@@ -176,7 +197,7 @@ class ApiForm extends React.Component {
             </Form.Item>
             <Form.Item
               key='registryCenterUrl'
-              label='注册中心地址, 如果为空将使用Dubbo 提供者Ip和端口进行直连'>
+              label={this.state.locale.registryCenterUrlFormLabel}>
               <Input
                 id='registryCenterUrl'
                 htmlType={'text'}
@@ -190,7 +211,7 @@ class ApiForm extends React.Component {
               formsArray.map((item, index) => {
                 return (
                   <div key={'formDiv' + index} style={{ marginTop: 20 }}>
-                    {'参数名: ' + item.get('name')}
+                    {this.state.locale.prarmNameLabel + ': ' + item.get('name')}
                     <div style={{ width: '1000px', height:'220px' }}>
                       <div style={{ float: 'left', border: '2px solid #cccccc', 
                             width: '300px', height: '100%', padding: '5px' }}>
@@ -199,7 +220,7 @@ class ApiForm extends React.Component {
                       </div>
                       <div style={{float: "left"}}>
                         <Form.Item 
-                          help={item.get('required') ? '该参数为必填' : ''}
+                          help={item.get('required') ? this.state.locale.prarmRequiredLabel : ''}
                           key={'formItem' + index}
                           required={item.get('required')}
                           style={{padding: '5px'}}
@@ -221,11 +242,11 @@ class ApiForm extends React.Component {
               style={{ marginLeft: 20, marginTop: 20, width: '600px' }}
               onClick={ this.doTestApi.bind(this) }
             >
-              测试
+              {this.state.locale.doTestBtn}
             </Form.Submit>
           </Form>
           <div style={{marginTop: 30, backgroundColor: '#3e3e3e', color: '#f0f8ff'}}>
-            <h1>响应</h1>
+            <h1>{this.state.locale.responseLabel}</h1>
           </div>
           <div>
             <div
@@ -234,7 +255,7 @@ class ApiForm extends React.Component {
               <div
                 style={{backgroundColor: '#3971a2', color: '#f0f8ff'}}
               >
-                <h3>响应示例</h3>
+                <h3>{this.state.locale.responseExampleLabel}</h3>
               </div>
             {this.buildResponseInfoView()}
             </div>
@@ -244,7 +265,7 @@ class ApiForm extends React.Component {
               <div
                 style={{backgroundColor: '#3c9069', color: '#f0f8ff'}}
               >
-                <h3>接口响应</h3>
+                <h3>{this.state.locale.apiResponseLabel}</h3>
               </div>
             {this.buildResponseDataView()}
             </div>
@@ -254,7 +275,7 @@ class ApiForm extends React.Component {
       );
     } else {
       return (
-        <h1>加载中...</h1>
+        <h1>{this.state.locale.LoadingLabel}</h1>
       );
     }
     
@@ -273,7 +294,7 @@ class ApiForm extends React.Component {
     try{
       var responseInfoJsonObj = JSON.parse(this.state.responseInfo);
       if(typeof(responseInfoJsonObj) == 'string'){
-        throw 'data not json';
+        throw 'dataNotJson';
       }
       return (
         <ReactJson 
@@ -309,7 +330,7 @@ class ApiForm extends React.Component {
     }
     try{
       if(typeof(this.state.responseData) == 'string'){
-        throw 'data not json';
+        throw 'dataNotJson';
       }
       return (
         <ReactJson 
@@ -335,13 +356,13 @@ class ApiForm extends React.Component {
 
   doTestApi(v, e){
     if(e){
-      Message.error('有未填写的必填项');
+      Message.error(this.state.locale.requireTip);
       return false;
     }
     var allFromItems = $('.dubbo-doc-form-item-class input, .dubbo-doc-form-item-class  select, .dubbo-doc-form-item-class textarea');
     var tempMap = new Map();
     allFromItems.each((index, element) => {
-      // 把所有表单元素按照dubbo接口参数Bean分类
+      // Classify all form elements according to the dubbo api parameter bean
       var elementIdSplited = element.id.split('@@');
       var tempMapKey = elementIdSplited[0] + "@@" + elementIdSplited[1];
       var tempMapValueArray = tempMap.get(tempMapKey);
@@ -391,7 +412,7 @@ class ApiForm extends React.Component {
       },
       data: JSON.stringify(postData),
     }).catch(error => {
-      Message.error('请求接口发生异常,请检查提交的数据,特别是JSON类数据和其中的枚举部分');
+      Message.error(this.state.locale.requestApiErrorTip);
       console.log(error);
     }).then(response => {
       this.setState({
@@ -404,10 +425,10 @@ class ApiForm extends React.Component {
   showApiInfo(){
     return (
       <div>
-        <h1>接口名称: <span>{this.state.apiInfoData.apiChName + '(' + this.state.apiName + ')'}</span></h1>
-        <h1>接口说明: <span>{this.state.apiInfoData.apiRespDec}</span></h1>
-        <h1>接口版本: <span>{this.state.apiInfoData.apiVersion}</span></h1>
-        <h1>接口描述: <span>{this.state.apiInfoData.apiDescription}</span></h1>
+        <h1>{this.state.locale.apiNameShowLabel}: <span>{this.state.apiInfoData.apiChName + '(' + this.state.apiName + ')'}</span></h1>
+        <h1>{this.state.locale.apiRespDecShowLabel}: <span>{this.state.apiInfoData.apiRespDec}</span></h1>
+        <h1>{this.state.locale.apiVersionShowLabel}: <span>{this.state.apiInfoData.apiVersion}</span></h1>
+        <h1>{this.state.locale.apiDescriptionShowLabel}: <span>{this.state.apiInfoData.apiDescription}</span></h1>
       </div>
     );
   }
@@ -550,7 +571,7 @@ class ApiForm extends React.Component {
         return this.buildTestArea(item);
         break;
       default:
-        return (<span>未知类型</span>);
+        return (<span>{this.state.locale.unsupportedHtmlTypeTip}</span>);
         break;
     }
   }
@@ -567,7 +588,7 @@ class ApiForm extends React.Component {
           shape={'flower'}
           style={{ position: 'relative', width: '100%', overflow: 'auto' }}
           visible={this.state.loading}
-          tip={'Loading...'}
+          tip={this.state.locale.LoadingLabel}
           color={'#333'}
         >
           <div>

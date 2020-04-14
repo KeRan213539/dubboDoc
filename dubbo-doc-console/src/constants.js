@@ -9,16 +9,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- .footer {
-  line-height: 20px;
-  text-align: center;
-}
-
-.logo {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.copyright {
-  font-size: 12px;
-}
+export const LANGUAGE_KEY = 'dubboDoc_language';
+export const LANGUAGE_SWITCH = 'LANGUAGE_SWITCH';
+export const LANGUAGE_SWITCH_ALL_PAGE = 'LANGUAGE_SWITCH_ALL_PAGE';
