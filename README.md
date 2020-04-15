@@ -1,4 +1,7 @@
 # dubboDoc
+
+[中文](./README_ch.md)
+
 Dubbo api documents, test tools, generate documents according to annotations, and provide test functions
 
 Only some annotations are needed to generate documents similar to swagger, without turning a non web's dubbo project into a web project.

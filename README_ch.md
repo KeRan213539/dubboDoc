@@ -1,4 +1,7 @@
 # dubboDoc
+
+[English](./README.md)
+
 dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能.
 
 功能参考 swagger+springfox, 只需要加一些注解就能生成类似swagger的文档, 不会把非web的dubbo项目变为web项目.
