@@ -12,4 +12,4 @@ dubbo:
     port: 20882
     name: dubbo
   application:
-    name:dubbo-doc-example-provider
+    name: dubbo-doc-example-provider
