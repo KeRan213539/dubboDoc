@@ -2,6 +2,8 @@
 
 [English](./README.md)
 
+[Gitee镜像](https://gitee.com/213539/dubboDoc)
+
 dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能.
 
 功能参考 swagger+springfox, 只需要加一些注解就能生成类似swagger的文档, 不会把非web的dubbo项目变为web项目.
@@ -51,7 +53,11 @@ dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能
 </dependency>
 ```
 2.下载 dubbo-doc-ui-server [下载地址](https://github.com/KeRan213539/dubboDoc/releases)
+
+[国内用户可到码云下载](https://gitee.com/213539/dubboDoc/releases)
+
 3. 启动 dubbo-doc-ui-server
+
 4. 访问: http:// localhost:8888
    * application.yml 中可以修改端口
    * swagger-ui http:// localhost:8888/swagger-ui.html
