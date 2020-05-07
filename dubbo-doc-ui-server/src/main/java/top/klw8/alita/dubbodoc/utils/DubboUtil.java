@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package top.klw8.alita.dubbodoc.utils;
 
 import org.apache.dubbo.config.ApplicationConfig;
@@ -14,33 +30,45 @@ import java.util.concurrent.Executors;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboUtil
- * @Description: dubbo操作相关工具类
+ * @Description: Dubbo operation related tool class
  * @date 2019/9/19 17:31
  */
 public class DubboUtil {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 当前应用的信息
+     * @Description: Current application information
      */
     private static ApplicationConfig application;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 注册中心信息缓存
+     * @Description: Registry information cache
      */
     private static Map<String, RegistryConfig> registryConfigCache;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: dubbo服务接口代理缓存
+     * @Description: Dubbo service interface proxy cache
      */
     private static Map<String, ReferenceConfig<GenericService>> referenceCache;
 
     private static final ExecutorService executor;
 
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: Default retries
+     */
+    private static int retries = 2;
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: Default timeout
+     */
+    private static int timeout = 1000;
+
     static{
-        // T(线程数) = N(服务器内核数) * u(期望cpu利用率) * （1 + E(等待时间)/C(计算时间));
+        // T (number of threads) = N (number of server cores) * u (expected CPU utilization) * (1 + E (waiting time) / C (calculation time))
         executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 40 * (1 + 5 / 2));
         application = new ApplicationConfig();
         application.setName("alita-dubbo-debug-tool");
@@ -48,11 +76,16 @@ public class DubboUtil {
         referenceCache = new ConcurrentHashMap<>();
     }
 
+    public static void setRetriesAndTimeout(int retries, int timeout){
+        DubboUtil.retries = retries;
+        DubboUtil.timeout = timeout;
+    }
+
     /**
      * @author klw(213539@qq.com)
-     * @Description: 获取注册中心信息
+     * @Description: Get registry information
      * @Date 2019/9/19 17:39
-     * @param: address 注册中心地址
+     * @param: address Address of Registration Center
      * @return org.apache.dubbo.config.RegistryConfig
      */
     private static RegistryConfig getRegistryConfig(String address) {
@@ -68,26 +101,45 @@ public class DubboUtil {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: 获取服务的代理对象
+     * @Description: Get proxy object for dubbo service
      * @Date 2019/9/19 17:43
-     * @param: address  注册中心地址
-     * @param: interfaceName  接口完整包路径
+     * @param: address  address Address of Registration Center
+     * @param: interfaceName  Interface full package path
      * @return org.apache.dubbo.config.ReferenceConfig<org.apache.dubbo.rpc.service.GenericService>
      */
     private static ReferenceConfig<GenericService> getReferenceConfig(String address, String interfaceName) {
-        ReferenceConfig<GenericService> referenceConfig = referenceCache.get(interfaceName);
+        ReferenceConfig<GenericService> referenceConfig = referenceCache.get(address + "/" + interfaceName);
         if (null == referenceConfig) {
             referenceConfig = new ReferenceConfig<>();
+            referenceConfig.setRetries(retries);
+            referenceConfig.setTimeout(timeout);
             referenceConfig.setApplication(application);
-            referenceConfig.setRegistry(getRegistryConfig(address));
+            if(address.startsWith("dubbo")){
+                referenceConfig.setUrl(address);
+            } else {
+                referenceConfig.setRegistry(getRegistryConfig(address));
+            }
             referenceConfig.setInterface(interfaceName);
-            // 声明为泛化接口
+            // Declared as a generic interface
             referenceConfig.setGeneric(true);
-            referenceCache.put(interfaceName, referenceConfig);
+            referenceCache.put(address + "/" + interfaceName, referenceConfig);
         }
         return referenceConfig;
     }
 
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: Call duboo provider and return {@link CompletableFuture}
+     * @Date 2020/3/1 14:55
+     * @param: address
+     * @param: interfaceName
+     * @param: methodName
+     * @param: async  Whether the provider is asynchronous is to directly return the {@link CompletableFuture}
+     * returned by the provider, not to wrap it as {@link CompletableFuture}
+     * @param: prarmTypes
+     * @param: prarmValues
+     * @return java.util.concurrent.CompletableFuture<java.lang.Object>
+     */
     public static CompletableFuture<Object> invoke(String address, String interfaceName,
                                                   String methodName, boolean async, String[] prarmTypes,
                                                   Object[] prarmValues) {
@@ -104,6 +156,30 @@ public class DubboUtil {
             }
         }
         return future;
+    }
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: Synchronous call provider. The provider must provide synchronous api
+     * @Date 2020/3/1 14:58
+     * @param: address
+     * @param: interfaceName
+     * @param: methodName
+     * @param: prarmTypes
+     * @param: prarmValues
+     * @return java.lang.Object
+     */
+    public static Object invokeSync(String address, String interfaceName,
+                                                   String methodName, String[] prarmTypes,
+                                                   Object[] prarmValues) {
+        ReferenceConfig<GenericService> reference = getReferenceConfig(address, interfaceName);
+        if (null != reference) {
+            GenericService genericService = reference.get();
+            if (null != genericService) {
+                return genericService.$invoke(methodName, prarmTypes, prarmValues);
+            }
+        }
+        return null;
     }
 
 }
