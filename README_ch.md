@@ -33,11 +33,24 @@ dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能
 ## 注册中心支持
 * 理论上dubbo支持的所有注册中心都支持
 
-## 如何使用?(TODO-这部分会在正式发布后修改: 增加引用的包名和ui-server的下载连接)
+## 如何使用?
 1. dubbo项目的方法参数中加上 dubbo doc注解
    * dubbo提供者项目引入 dubbo-doc-core
    * 如果dubbo的接口和参数是一个单独的jar包项目,引入dubbo-doc-annotations
-2.下载 dubbo-doc-ui-server {url}
+```
+<dependency>
+    <groupId>top.klw8.alita.dubbodoc</groupId>
+    <artifactId>dubbo-doc-annotations</artifactId>
+    <version>1.0.1</version>
+</dependency>
+
+<dependency>
+    <groupId>top.klw8.alita.dubbodoc</groupId>
+    <artifactId>dubbo-doc-core</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
+2.下载 dubbo-doc-ui-server [下载地址](https://github.com/KeRan213539/dubboDoc/releases)
 3. 启动 dubbo-doc-ui-server
 4. 访问: http:// localhost:8888
    * application.yml 中可以修改端口

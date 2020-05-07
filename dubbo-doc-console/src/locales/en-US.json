@@ -19,7 +19,7 @@
     "registryCenterUrlFormLabel": "Registry address. If it is empty, Dubbo provider IP and port will be used for direct connection",
     "prarmNameLabel": "Parameter name",
     "prarmRequiredLabel": "This parameter is required",
-    "doTestBtn": "Test",
+    "doTestBtn": "Do Test",
     "responseLabel": "Response",
     "responseExampleLabel": "Response Example",
     "apiResponseLabel": "Api Response",

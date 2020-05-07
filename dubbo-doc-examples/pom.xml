@@ -21,13 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>dubbo-doc-examples</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1</version>
     <description>dubbo doc examples</description>
 
     <parent>
         <groupId>top.klw8.alita.dubbodoc</groupId>
         <artifactId>dubbo-doc</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <modules>
@@ -36,7 +36,7 @@
     </modules>
 
     <properties>
-        <internal-libs.version>1.0.0-SNAPSHOT</internal-libs.version>
+        <internal-libs.version>1.0.1</internal-libs.version>
     </properties>
 
     <dependencyManagement>

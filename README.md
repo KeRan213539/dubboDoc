@@ -39,11 +39,24 @@ so I have the idea of doing it myself...
 ## Registry center suppor
 * In theory, all registries supported by Dubbo support
 
-## How to use?(TODO-This part will be modified after the official release: add the referenced package name and the download connection of UI server)
+## How to use?
 1. Dubbo doc annotation added to method parameters of Dubbo project
    * Dubbo provider project introduces Dubbo doc core
    * If Dubbo's interface and parameters are a separate jar package project, introduce Dubbo doc annotations
-2.Download dubbo-doc-ui-server {url}
+```
+<dependency>
+   <groupId>top.klw8.alita.dubbodoc</groupId>
+   <artifactId>dubbo-doc-annotations</artifactId>
+   <version>1.0.1</version>
+</dependency>
+
+<dependency>
+   <groupId>top.klw8.alita.dubbodoc</groupId>
+   <artifactId>dubbo-doc-core</artifactId>
+   <version>1.0.1</version>
+</dependency>
+```
+2.Download dubbo-doc-ui-server [Download](https://github.com/KeRan213539/dubboDoc/releases)
 3. Start dubbo-doc-ui-server
 4. Visit: http:// localhost:8888
    * Port can be modified in application.yml
