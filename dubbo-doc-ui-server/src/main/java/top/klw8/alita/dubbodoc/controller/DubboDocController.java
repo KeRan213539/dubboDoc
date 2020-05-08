@@ -22,6 +22,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;
@@ -38,10 +39,7 @@ import top.klw8.alita.dubbodoc.utils.DubboUtil;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -107,12 +105,31 @@ public class DubboDocController {
             for(int i = 0; i < methodPrarms.size(); i++){
                 CallDubboServiceRequestInterfacePrarm prarm = methodPrarms.get(i);
                 prarmTypes[i] = prarm.getPrarmType();
-                prarmValues[i] = prarm.getPrarmValue();
+                Object prarmValue = prarm.getPrarmValue();
+                if(prarmValue != null && prarmValue instanceof String && StringUtils.isBlank((String) prarmValue)){
+                    prarmValues[i] = null;
+                } else {
+                    this.emptyString2Null(prarm.getPrarmValue());
+                    prarmValues[i] = prarm.getPrarmValue();
+                }
             }
         }
         CompletableFuture<Object> future = DubboUtil.invoke(dubboCfg.getRegistryCenterUrl(), dubboCfg.getInterfaceClassName(),
                 dubboCfg.getMethodName(), dubboCfg.isAsync(), prarmTypes, prarmValues);
         return Mono.fromFuture(future).map( o -> JSON.toJSONString(o, CLASS_NAME_PRE_FILTER));
+    }
+
+    private void emptyString2Null(Object prarmValue){
+        if(null != prarmValue && prarmValue instanceof Map){
+            Map<String, Object> tempMap = (Map<String, Object>) prarmValue;
+            tempMap.forEach((k, v) -> {
+                if(v != null && v instanceof String && StringUtils.isBlank((String)v)) {
+                    tempMap.put(k, null);
+                } else {
+                    this.emptyString2Null(v);
+                }
+            });
+        }
     }
 
     @ApiOperation(value = "Get basic information of all modules, excluding API parameter information", notes = "Get basic information of all modules, excluding API parameter information", httpMethod = "GET", produces = "application/json")
