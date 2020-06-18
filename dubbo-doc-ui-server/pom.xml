@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>top.klw8.alita.dubbodoc</groupId>
     <artifactId>dubbo-doc-ui-server</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
     <name>dubbo-doc-ui-server</name>
     <description>Web ui, responsible for displaying doc and providing testing function</description>
@@ -32,7 +32,7 @@
     </parent>
 
     <properties>
-        <dubbo.doc.version>1.0.1</dubbo.doc.version>
+        <dubbo.doc.version>1.0.2</dubbo.doc.version>
     </properties>
     
     <dependencyManagement>

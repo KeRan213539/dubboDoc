@@ -39,17 +39,19 @@ dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能
 1. dubbo项目的方法参数中加上 dubbo doc注解
    * dubbo提供者项目引入 dubbo-doc-core
    * 如果dubbo的接口和参数是一个单独的jar包项目,引入dubbo-doc-annotations
+   
+### 当前版本: 1.0.2
 ```
 <dependency>
     <groupId>top.klw8.alita.dubbodoc</groupId>
     <artifactId>dubbo-doc-annotations</artifactId>
-    <version>1.0.1</version>
+    <version>${dubboDoc-version}</version>
 </dependency>
 
 <dependency>
     <groupId>top.klw8.alita.dubbodoc</groupId>
     <artifactId>dubbo-doc-core</artifactId>
-    <version>1.0.1</version>
+    <version>${dubboDoc-version}</version>
 </dependency>
 ```
 2.下载 dubbo-doc-ui-server [下载地址](https://github.com/KeRan213539/dubboDoc/releases)
