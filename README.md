@@ -43,17 +43,19 @@ so I have the idea of doing it myself...
 1. Dubbo doc annotation added to method parameters of Dubbo project
    * Dubbo provider project introduces Dubbo doc core
    * If Dubbo's interface and parameters are a separate jar package project, introduce Dubbo doc annotations
+
+### Current Version: 1.0.2
 ```
 <dependency>
    <groupId>top.klw8.alita.dubbodoc</groupId>
    <artifactId>dubbo-doc-annotations</artifactId>
-   <version>1.0.1</version>
+   <version>${dubboDoc-version}</version>
 </dependency>
 
 <dependency>
    <groupId>top.klw8.alita.dubbodoc</groupId>
    <artifactId>dubbo-doc-core</artifactId>
-   <version>1.0.1</version>
+   <version>${dubboDoc-version}</version>
 </dependency>
 ```
 2.Download dubbo-doc-ui-server [Download](https://github.com/KeRan213539/dubboDoc/releases)

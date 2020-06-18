@@ -23,6 +23,7 @@ import org.apache.dubbo.config.ProtocolConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.config.ServiceConfig;
 import org.apache.dubbo.config.annotation.Service;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
@@ -72,13 +73,19 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
         log.info("================= Dubbo Doc--Start scanning and processing dubbo doc annotations ================");
 
         Map<String, Object> apiModules = applicationContext.getBeansWithAnnotation(DubboApiModule.class);
-        apiModules.forEach((key, apiModule) -> {
-            DubboApiModule moduleAnn = apiModule.getClass().getAnnotation(DubboApiModule.class);
-            if(!apiModule.getClass().isAnnotationPresent(Service.class)){
-                log.warn("【Warning】{} @DubboApiModule annotation is used, but it is not a dubbo provider (without {} annotation)", apiModule.getClass().getName(), Service.class.getName());
+        apiModules.forEach((key, apiModuleTemp) -> {
+            Class<?> apiModuleClass;
+            if(AopUtils.isAopProxy(apiModuleTemp)){
+                apiModuleClass = AopUtils.getTargetClass(apiModuleTemp);
+            } else {
+                apiModuleClass = apiModuleTemp.getClass();
+            }
+            DubboApiModule moduleAnn = apiModuleClass.getAnnotation(DubboApiModule.class);
+            if(!apiModuleClass.isAnnotationPresent(Service.class)){
+                log.warn("【Warning】{} @DubboApiModule annotation is used, but it is not a dubbo provider (without {} annotation)", apiModuleClass.getName(), Service.class.getName());
                 return;
             }
-            Service dubboService = apiModule.getClass().getAnnotation(Service.class);
+            Service dubboService = apiModuleClass.getAnnotation(Service.class);
             boolean async = dubboService.async();
             Map<String, Object> moduleCacheItem = new HashMap<>(4);
             DubboDocCache.addApiModule(moduleAnn.apiInterface().getCanonicalName(), moduleCacheItem);
@@ -89,7 +96,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
             //module version
             moduleCacheItem.put("moduleVersion", moduleAnn.version());
 
-            Method[] apiModuleMethods = apiModule.getClass().getMethods();
+            Method[] apiModuleMethods = apiModuleClass.getMethods();
             // API basic information list in module cache
             List<Map<String, Object>> moduleApiList = new ArrayList<>(apiModuleMethods.length);
             moduleCacheItem.put("moduleApiList", moduleApiList);

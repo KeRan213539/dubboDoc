@@ -22,7 +22,7 @@
     <packaging>pom</packaging>
     <groupId>top.klw8.alita.dubbodoc</groupId>
     <artifactId>dubbo-doc</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <name>dubbo-doc</name>
     <description>Dubbo interface documentation, testing tools</description>
 
@@ -77,7 +77,7 @@
         <argLine>-Dfile.encoding=UTF-8</argLine>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skipJunitTest>true</skipJunitTest>
-        <internal-libs.version>1.0.1</internal-libs.version>
+        <internal-libs.version>1.0.2</internal-libs.version>
         
         <dubbo.version>2.7.5</dubbo.version>
         <spring-boot.version>2.1.12.RELEASE</spring-boot.version>
