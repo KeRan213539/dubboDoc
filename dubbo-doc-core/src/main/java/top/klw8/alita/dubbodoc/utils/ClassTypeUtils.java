@@ -118,64 +118,49 @@ public class ClassTypeUtils {
             Object obj = initClassTypeWithDefaultValue(null, arrType, processCount);
             return new Object[]{obj};
         } else if (Collection.class.isAssignableFrom(classType)) {
-            if(genericType == null){
-                return null;
-            }
-
             List<Object> list = new ArrayList<>(1);
+            if(genericType == null){
+                list.add(new Object());
+                return list;
+            }
             Object obj;
             if(genericType instanceof ParameterizedType) {
                 ParameterizedType pt = (ParameterizedType) genericType;
-                obj = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[0], processCount);
+                String subTypeName = pt.getActualTypeArguments()[0].getTypeName();
+                obj = initClassTypeWithDefaultValue(makeParameterizedType(subTypeName), makeClass(subTypeName), processCount);
                 list.add(obj);
             }
             return list;
         } else if (Map.class.isAssignableFrom(classType)) {
-            if(genericType == null){
-                return null;
-            }
             Map<String, Object> map = new HashMap<>(1);
+            if(genericType == null){
+                map.put("", new Object());
+                return map;
+            }
             if(genericType instanceof ParameterizedType) {
                 ParameterizedType pt  = (ParameterizedType)genericType;
-                Object objValue = initClassTypeWithDefaultValue(null, (Class<?>) pt.getActualTypeArguments()[1], processCount);
+                String subTypeName = pt.getActualTypeArguments()[1].getTypeName();
+                Object objValue = initClassTypeWithDefaultValue(makeParameterizedType(subTypeName), makeClass(subTypeName), processCount);
                 map.put("", objValue);
             }
             return map;
         } else if (CompletableFuture.class.isAssignableFrom(classType)) {
             // process CompletableFuture
             if(genericType == null){
-                return null;
+                return new Object();
             }
             ParameterizedType pt  = (ParameterizedType)genericType;
             String typeName = pt.getActualTypeArguments()[0].getTypeName();
-            Class<?> typeClass;
-            Class<?>[] subClassArray;
-            try {
-                if(typeName.indexOf("<") == -1){
-                    // CompletableFuture 中的类没有泛型
-                    typeClass = Class.forName(typeName);
-                    return initClassTypeWithDefaultValue(null, typeClass, processCount);
-                }
-                // CompletableFuture 中的类有泛型
-                typeClass = Class.forName(typeName.substring(0, typeName.indexOf("<")));
-                String subTypeNames = typeName.substring((typeName.indexOf("<") + 1), (typeName.length() - 1));
-                String[] subTypeNamesArray = subTypeNames.split(",");
-                subClassArray = new Class[subTypeNamesArray.length];
-                for(int i = 0; i < subTypeNamesArray.length; i++){
-                    subClassArray[i] = Class.forName(subTypeNamesArray[i].trim());
-                }
-            } catch (ClassNotFoundException e) {
-                log.warn("Exception getting generics in completabilefuture", e);
-                return null;
-            }
-            ParameterizedType pt2 = ParameterizedTypeImpl.make(typeClass, subClassArray, null);
-            return initClassTypeWithDefaultValue(pt2, typeClass, processCount);
+            return initClassTypeWithDefaultValue(makeParameterizedType(typeName), makeClass(typeName), processCount);
         }
 
         Map<String, Object> result = new HashMap<>(16);
         // get all fields
         List<Field> allFields = getAllFields(null, classType);
         for (Field field2 : allFields) {
+            if("serialVersionUID".equals(field2.getName())){
+                continue;
+            }
             if(String.class.isAssignableFrom(field2.getType())){
                 if(field2.isAnnotationPresent(RequestParam.class)) {
                     RequestParam requestParam = field2.getAnnotation(RequestParam.class);
@@ -199,7 +184,7 @@ public class ClassTypeUtils {
                     Type[] actualTypeArguments = pt.getActualTypeArguments();
                     if(actualTypeArguments.length > 0) {
                         if(actualTypeArguments.length == 1) {
-                            result.put(field2.getName(), initClassTypeWithDefaultValue(field2.getGenericType(), (Class<?>) pt.getActualTypeArguments()[0], processCount));
+                            result.put(field2.getName(), initClassTypeWithDefaultValue(makeParameterizedType(actualTypeArguments[0].getTypeName()), makeClass(pt.getActualTypeArguments()[0].getTypeName()), processCount));
                         } else {
                             log.warn("{}#{} generics are not supported temporarily. This property will be ignored",classType.getName(), field2.getName());
                         }
@@ -251,6 +236,52 @@ public class ClassTypeUtils {
             CollectionUtils.addAll(fieldList, classz.getDeclaredFields());
         }
         return getAllFields(fieldList, classz.getSuperclass());
+    }
+
+    public static ParameterizedType makeParameterizedType(String typeName){
+        if(typeName.indexOf("<") == -1){
+            return null;
+        }
+        try {
+            Class<?> typeClass;
+            typeClass = Class.forName(typeName.substring(0, typeName.indexOf("<")));
+            String subTypeNames = typeName.substring((typeName.indexOf("<") + 1), (typeName.length() - 1));
+            String[] subTypeNamesArray = subTypeNames.split(",");
+            Type[] subTypes = makeSubClass(subTypeNamesArray);
+            return ParameterizedTypeImpl.make(typeClass, subTypes, null);
+        } catch (ClassNotFoundException e) {
+            log.warn("Exception getting generics in completabilefuture", e);
+            return null;
+        }
+    }
+
+    public static Class<?> makeClass(String className){
+        className = className.trim();
+        try {
+            if(className.indexOf("<") == -1){
+                // CompletableFuture 中的类没有泛型
+                return Class.forName(className);
+            } else {
+                return Class.forName(className.substring(0, className.indexOf("<")));
+            }
+        } catch (ClassNotFoundException e) {
+            log.warn("Exception getting generics in completabilefuture", e);
+            return null;
+        }
+    }
+
+    private static Type[] makeSubClass(String... classNames){
+        Type[] types;
+        if(classNames != null){
+            types = new Type[classNames.length];
+            for(int i = 0; i < classNames.length; i++){
+                String className = classNames[i];
+                types[i] = new SimpleTypeImpl(className);
+            }
+        } else {
+            types = new Type[0];
+        }
+        return types;
     }
 
 }

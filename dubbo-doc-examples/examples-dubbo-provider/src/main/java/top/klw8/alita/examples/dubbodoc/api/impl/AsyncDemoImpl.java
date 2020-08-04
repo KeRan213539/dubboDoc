@@ -87,4 +87,10 @@ public class AsyncDemoImpl implements IAsyncDemo {
     public CompletableFuture<Integer> demoApi11() {
         return null;
     }
+
+    @Override
+    @DubboApi(value = "many generics", responseClassDescription="many generics")
+    public CompletableFuture<List<List<String>>> demoApi12(){
+        return null;
+    }
 }

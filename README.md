@@ -44,7 +44,7 @@ so I have the idea of doing it myself...
    * Dubbo provider project introduces Dubbo doc core
    * If Dubbo's interface and parameters are a separate jar package project, introduce Dubbo doc annotations
 
-### Current Version: 1.0.2
+### Current Version: 1.0.3
 ```
 <dependency>
    <groupId>top.klw8.alita.dubbodoc</groupId>

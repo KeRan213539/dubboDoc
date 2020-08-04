@@ -77,4 +77,14 @@ public interface IAsyncDemo {
      */
     CompletableFuture<Integer> demoApi11();
 
+
+    /**
+     * @author klw(213539@qq.com)
+     * @Description: many generics
+     * @Date 2020/7/30 17:02
+     * @param:
+     * @return java.util.concurrent.CompletableFuture<java.util.List<java.util.List<java.lang.String>>>
+     */
+    CompletableFuture<List<List<String>>> demoApi12();
+
 }
