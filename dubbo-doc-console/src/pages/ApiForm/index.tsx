@@ -297,7 +297,11 @@ class ApiForm extends React.Component {
       );
     }
     try{
-      var responseInfoJsonObj = JSON.parse(this.state.responseInfo);
+      var responseInfo2 = this.state.responseInfo;
+      if(!((responseInfo2.startsWith("{") && responseInfo2.endsWith("}")) || (responseInfo2.startsWith("[") && responseInfo2.endsWith("]")))){
+        throw 'dataNotJson';
+      }
+      var responseInfoJsonObj = JSON.parse(responseInfo2);
       if(typeof(responseInfoJsonObj) == 'string'){
         throw 'dataNotJson';
       }
