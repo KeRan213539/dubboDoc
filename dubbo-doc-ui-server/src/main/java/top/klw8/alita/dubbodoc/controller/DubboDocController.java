@@ -106,11 +106,19 @@ public class DubboDocController {
                 CallDubboServiceRequestInterfacePrarm prarm = methodPrarms.get(i);
                 prarmTypes[i] = prarm.getPrarmType();
                 Object prarmValue = prarm.getPrarmValue();
-                if(prarmValue != null && prarmValue instanceof String && StringUtils.isBlank((String) prarmValue)){
-                    prarmValues[i] = null;
+                if(isBaseType(prarm.getPrarmType()) && null != prarmValue){
+                    if(prarmValue instanceof Map){
+                        Map<?, ?> tempMap = (Map<?, ?>) prarmValue;
+                        if(!tempMap.isEmpty()) {
+                            this.emptyString2Null(tempMap);
+                            prarmValues[i] = tempMap.values().stream().findFirst().orElse(null);
+                        }
+                    } else {
+                        prarmValues[i] = emptyString2Null(prarmValue);
+                    }
                 } else {
-                    this.emptyString2Null(prarm.getPrarmValue());
-                    prarmValues[i] = prarm.getPrarmValue();
+                    this.emptyString2Null(prarmValue);
+                    prarmValues[i] = prarmValue;
                 }
             }
         }
@@ -119,17 +127,22 @@ public class DubboDocController {
         return Mono.fromFuture(future).map( o -> JSON.toJSONString(o, CLASS_NAME_PRE_FILTER));
     }
 
-    private void emptyString2Null(Object prarmValue){
-        if(null != prarmValue && prarmValue instanceof Map){
-            Map<String, Object> tempMap = (Map<String, Object>) prarmValue;
-            tempMap.forEach((k, v) -> {
-                if(v != null && v instanceof String && StringUtils.isBlank((String)v)) {
-                    tempMap.put(k, null);
-                } else {
-                    this.emptyString2Null(v);
-                }
-            });
+    private Object emptyString2Null(Object prarmValue){
+        if(null != prarmValue) {
+            if (prarmValue instanceof String && StringUtils.isBlank((String) prarmValue)) {
+                return null;
+            } else if (prarmValue instanceof Map) {
+                Map<String, Object> tempMap = (Map<String, Object>) prarmValue;
+                tempMap.forEach((k, v) -> {
+                    if (v != null && v instanceof String && StringUtils.isBlank((String) v)) {
+                        tempMap.put(k, null);
+                    } else {
+                        this.emptyString2Null(v);
+                    }
+                });
+            }
         }
+        return prarmValue;
     }
 
     @ApiOperation(value = "Get basic information of all modules, excluding API parameter information", notes = "Get basic information of all modules, excluding API parameter information", httpMethod = "GET", produces = "application/json")
@@ -158,5 +171,20 @@ public class DubboDocController {
         prarm.setPrarmValue(apiInfoRequest.getApiName());
         methodPrarms.add(prarm);
         return callDubboService(req, methodPrarms);
+    }
+
+    private static boolean isBaseType(String typeStr) {
+        if ("java.lang.Integer".equals(typeStr) ||
+                "java.lang.Byte".equals(typeStr) ||
+                "java.lang.Long".equals(typeStr) ||
+                "java.lang.Double".equals(typeStr) ||
+                "java.lang.Float".equals(typeStr) ||
+                "java.lang.Character".equals(typeStr) ||
+                "java.lang.Short".equals(typeStr) ||
+                "java.lang.Boolean".equals(typeStr) ||
+                "java.lang.String".equals(typeStr)) {
+            return true;
+        }
+        return false;
     }
 }
