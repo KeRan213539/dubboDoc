@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: dubbo-doc-example-provider-sca
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        serverAddr: "127.0.0.1:8848"

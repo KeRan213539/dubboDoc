@@ -17,11 +17,11 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>examples-dubbo-provider</artifactId>
+    <artifactId>examples-dubbo-provider-sca</artifactId>
     <version>1.0.4</version>
     <packaging>jar</packaging>
-    <name>examples-dubbo-provider</name>
-    <description>dubbo doc examples -- dubbo service provider</description>
+    <name>examples-dubbo-provider-sca</name>
+    <description>dubbo doc examples -- dubbo service provider using spring-cloud-alibaba-dubbo</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -61,32 +61,13 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo-registry-nacos</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>log4j</artifactId>
-                    <groupId>log4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.dubbo</groupId>
-                    <artifactId>dubbo-remoting-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>dubbo-common</artifactId>
-                    <groupId>org.apache.dubbo</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
         </dependency>
 
         <dependency>
@@ -102,7 +83,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>top.klw8.alita.examples.dubbodoc.ExampleApplication</mainClass>
+                    <mainClass>top.klw8.alita.examples.dubbodoc.ExampleScaApplication</mainClass>
                     <classifier>exec</classifier>
                 </configuration>
             </plugin>

@@ -44,7 +44,7 @@ so I have the idea of doing it myself...
    * Dubbo provider project introduces Dubbo doc core
    * If Dubbo's interface and parameters are a separate jar package project, introduce Dubbo doc annotations
 
-### Current Version: 1.0.3
+### Current Version: 1.0.4
 ```
 <dependency>
    <groupId>top.klw8.alita.dubbodoc</groupId>
@@ -111,8 +111,8 @@ connection to obtain the list of different interfaces of different functions.
 * readmeImgs: Pictures used by README.md
 
 ## Major dependent version
-* spring-boot: 2.1.12.RELEASE
-* dubbo: apache dubbo 2.7.5
+* spring-boot: 2.3.4.RELEASE
+* dubbo: apache dubbo 2.7.8
 * icework in front(iceworks 4.0)
 
 ## What did Dubbo Doc do ?

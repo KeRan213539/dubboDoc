@@ -40,7 +40,7 @@ dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能
    * dubbo提供者项目引入 dubbo-doc-core
    * 如果dubbo的接口和参数是一个单独的jar包项目,引入dubbo-doc-annotations
    
-### 当前版本: 1.0.3
+### 当前版本: 1.0.4
 ```
 <dependency>
     <groupId>top.klw8.alita.dubbodoc</groupId>
@@ -107,8 +107,8 @@ dubbo 接口文档、测试工具,根据注解生成文档,并提供测试功能
 * readmeImgs: README.md 用到的图片
 
 ## 主要依赖版本
-* spring-boot: 2.1.12.RELEASE
-* dubbo: apache dubbo 2.7.5
+* spring-boot: 2.3.4.RELEASE
+* dubbo: apache dubbo 2.7.8
 * 前端使用飞冰(iceworks 4.0)
 
 ## Dubbo Doc 做了什么?

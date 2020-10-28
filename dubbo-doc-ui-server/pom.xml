@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>top.klw8.alita.dubbodoc</groupId>
     <artifactId>dubbo-doc-ui-server</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
     <name>dubbo-doc-ui-server</name>
     <description>Web ui, responsible for displaying doc and providing testing function</description>
@@ -27,12 +27,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.12.RELEASE</version>
+        <version>2.3.4.RELEASE</version>
         <relativePath />
     </parent>
 
     <properties>
-        <dubbo.doc.version>1.0.3</dubbo.doc.version>
+        <dubbo.doc.version>1.0.4</dubbo.doc.version>
     </properties>
     
     <dependencyManagement>

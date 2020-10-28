@@ -122,6 +122,12 @@ public class DubboDocController {
                 }
             }
         }
+        if (null == prarmTypes) {
+            prarmTypes = new String[0];
+        }
+        if (null == prarmValues) {
+            prarmValues = new Object[0];
+        }
         CompletableFuture<Object> future = DubboUtil.invoke(dubboCfg.getRegistryCenterUrl(), dubboCfg.getInterfaceClassName(),
                 dubboCfg.getMethodName(), dubboCfg.isAsync(), prarmTypes, prarmValues);
         return Mono.fromFuture(future).map( o -> JSON.toJSONString(o, CLASS_NAME_PRE_FILTER));
