@@ -21,7 +21,7 @@ import java.lang.annotation.*;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboApiModule
- * @Description: api module, used to mark the purpose of an interface class module
+ * api module, used to mark the purpose of an interface class module
  * @date 2020/1/31 22:12
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -31,19 +31,19 @@ public @interface DubboApiModule {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: module name
+     * module name
      */
     String value();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: dubbo api interface class
+     * dubbo api interface class
      */
     Class<?> apiInterface();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: module version
+     * module version
      */
     String version() default "";
 

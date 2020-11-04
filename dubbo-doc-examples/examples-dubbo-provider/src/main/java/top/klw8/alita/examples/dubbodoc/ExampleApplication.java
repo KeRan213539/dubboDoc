@@ -24,7 +24,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: ExampleApplication
- * @Description: example dubbo provider service application
+ * example dubbo provider service application
  * @date 2020/2/3 2:02
  */
 @SpringBootApplication

@@ -23,7 +23,7 @@ import lombok.Setter;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: ApiModuleListRequest
- * @Description: Obtain the API module list and the request parameters of the API parameter information interface
+ * Obtain the API module list and the request parameters of the API parameter information interface
  * @date 2020/3/1 18:48
  */
 @Getter

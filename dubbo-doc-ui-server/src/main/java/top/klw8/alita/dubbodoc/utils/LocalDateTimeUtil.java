@@ -26,7 +26,7 @@ import java.util.Date;
 /**
  * @author klw
  * @ClassName: LocalDateTimeUtil
- * @Description: Date time tool class of LocalDateTime
+ * Date time tool class of LocalDateTime
  * @date 2019-01-29 11:23:26
  */
 public class LocalDateTimeUtil {
@@ -37,7 +37,7 @@ public class LocalDateTimeUtil {
      * @return
      * @Title: formatToLDT
      * @author klw
-     * @Description: Create a LocalDateTime based on the passed in string date and the corresponding format
+     * Create a LocalDateTime based on the passed in string date and the corresponding format
      */
     public static LocalDateTime formatToLDT(String dateStr, String dateFormatter) {
         //yyyy-MM-dd HH:mm:ss
@@ -49,7 +49,7 @@ public class LocalDateTimeUtil {
      * @return
      * @Title: formatToLDT
      * @author klw
-     * @Description: Create LocalDateTime from a string in the format "yyyy-MM-dd HH:mm:ss"
+     * Create LocalDateTime from a string in the format "yyyy-MM-dd HH:mm:ss"
      */
     public static LocalDateTime formatToLDT(String dateStr) {
         return formatToLDT(dateStr, "yyyy-MM-dd HH:mm:ss");
@@ -61,7 +61,7 @@ public class LocalDateTimeUtil {
      * @return
      * @Title: formatToLDT
      * @author klw
-     * @Description: Create a LocalDate based on the passed in string date and the corresponding format
+     * Create a LocalDate based on the passed in string date and the corresponding format
      */
     public static LocalDate formatToLD(String dateStr, String dateFormatter) {
         return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(dateFormatter));
@@ -72,7 +72,7 @@ public class LocalDateTimeUtil {
      * @return
      * @Title: formatToLDT
      * @author klw
-     * @Description: Create LocalDate from a string in the format "yyyy-MM-dd"
+     * Create LocalDate from a string in the format "yyyy-MM-dd"
      */
     public static LocalDate formatToLD(String dateStr) {
         return formatToLD(dateStr, "yyyy-MM-dd");

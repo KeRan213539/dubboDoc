@@ -45,7 +45,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboDocController
- * @Description: dubbo doc ui server api
+ * dubbo doc ui server api
  * @date 2019/9/19 17:21
  */
 @Api(tags = {"alita-restful-API--demoAPI"})
@@ -62,14 +62,14 @@ public class DubboDocController {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: retries for dubbo provider
+     * retries for dubbo provider
      */
     @Value("${dubbo.consumer.retries:2}")
     private int retries;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: timeout
+     * timeout
      */
     @Value("${dubbo.consumer.timeout:1000}")
     private int timeout;
@@ -84,7 +84,7 @@ public class DubboDocController {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Set timeout and retries for {@link top.klw8.alita.dubbodoc.utils.DubboUtil}
+     * Set timeout and retries for {@link top.klw8.alita.dubbodoc.utils.DubboUtil}
      * @Date 2020/4/3 12:32
      * @param:
      * @return void
@@ -156,7 +156,7 @@ public class DubboDocController {
     public Mono<String> apiModuleList(ApiInfoRequest apiInfoRequest){
         CallDubboServiceRequest req = new CallDubboServiceRequest();
         req.setRegistryCenterUrl("dubbo://" + apiInfoRequest.getDubboIp() + ":" + apiInfoRequest.getDubboPort());
-        req.setInterfaceClassName("top.klw8.alita.dubbodoc.provider.IDubboDocProvider");
+        req.setInterfaceClassName("org.apache.dubbo.apidocs.core.providers.IDubboDocProvider");
         req.setMethodName("apiModuleList");
         req.setAsync(false);
         return callDubboService(req, null);
@@ -167,7 +167,7 @@ public class DubboDocController {
     public Mono<String> apiParamsResp(ApiInfoRequest apiInfoRequest){
         CallDubboServiceRequest req = new CallDubboServiceRequest();
         req.setRegistryCenterUrl("dubbo://" + apiInfoRequest.getDubboIp() + ":" + apiInfoRequest.getDubboPort());
-        req.setInterfaceClassName("top.klw8.alita.dubbodoc.provider.IDubboDocProvider");
+        req.setInterfaceClassName("org.apache.dubbo.apidocs.core.providers.IDubboDocProvider");
         req.setMethodName("apiParamsResponseInfo");
         req.setAsync(false);
 

@@ -22,7 +22,7 @@ import lombok.Setter;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: TestBean
- * @Description: test
+ * test
  * @date 2020/2/28 11:20
  */
 @Getter

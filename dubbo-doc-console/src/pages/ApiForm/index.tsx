@@ -190,7 +190,7 @@ class ApiForm extends React.Component {
             </Form.Item>
             <Form.Item
               key='apiFunctionName'
-              label={this.state.locale.apiModuleFormLabel}>
+              label={this.state.locale.apiFunctionNameFormLabel}>
               <Input
                 id='apiFunctionName'
                 htmlType={'text'}

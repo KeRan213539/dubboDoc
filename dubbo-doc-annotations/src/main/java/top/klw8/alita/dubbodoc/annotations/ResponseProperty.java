@@ -21,7 +21,7 @@ import java.lang.annotation.*;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: ResponseProperty
- * @Description: Dimension response property
+ * Dimension response property
  * @date 2020/2/2 13:35
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -32,13 +32,13 @@ public @interface ResponseProperty {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: property name
+     * property name
      */
     String value();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: example
+     * example
      */
     String example() default "";
 

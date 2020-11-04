@@ -23,7 +23,7 @@ import top.klw8.alita.dubbodoc.core.DubboDocCache;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboDocProviderImpl
- * @Description: The api implementation of Dubbo doc
+ * The api implementation of Dubbo doc
  * @date 2020/3/1 14:20
  */
 @Slf4j

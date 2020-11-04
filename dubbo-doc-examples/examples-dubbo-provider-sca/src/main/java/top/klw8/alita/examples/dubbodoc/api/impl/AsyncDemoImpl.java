@@ -33,7 +33,7 @@ import java.util.concurrent.Executors;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: AsyncDemoImpl
- * @Description: Asynchronous demo implementation
+ * Asynchronous demo implementation
  * @date 2020/3/16 9:37
  */
 @Service(async = true)

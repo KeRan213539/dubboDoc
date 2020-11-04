@@ -23,7 +23,7 @@ import top.klw8.alita.dubbodoc.annotations.EnableDubboApiDoc;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboDocConfig
- * @Description: dubbo doc config
+ * dubbo doc config
  * @date 2020/2/27 12:51
  */
 @Configuration

@@ -25,7 +25,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: ExampleScaApplication
- * @Description: example dubbo provider service application
+ * example dubbo provider service application
  * @date 2020/2/3 2:02
  */
 @SpringBootApplication

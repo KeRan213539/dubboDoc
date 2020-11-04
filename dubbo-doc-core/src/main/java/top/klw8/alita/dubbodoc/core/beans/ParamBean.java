@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: ParamBean
- * @Description: Parameter bean corresponding to {@link top.klw8.alita.dubbodoc.annotations.RequestParam}, for caching
+ * Parameter bean corresponding to {@link top.klw8.alita.dubbodoc.annotations.RequestParam}, for caching
  * @date 2020/2/27 18:33
  */
 @Getter
@@ -34,61 +34,61 @@ public class ParamBean {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: parameter name
+     * parameter name
      */
     private String name;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: parameter name, for display
+     * parameter name, for display
      */
     private String nameCh;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: required
+     * required
      */
     private Boolean required;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: description
+     * description
      */
     private String description;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: example
+     * example
      */
     private String example;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: default value
+     * default value
      */
     private String defaultValue;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: java type of parameter
+     * java type of parameter
      */
     private String javaType;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: What HTML elements should this parameter display
+     * What HTML elements should this parameter display
      */
     private HtmlTypeEnum htmlType;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: allowed values
+     * allowed values
      */
     private String[] allowableValues;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: If the parameter in a request bean is not a basic data type,
+     * If the parameter in a request bean is not a basic data type,
      * the {@link subParams} will have a value.
      * Because the HTML form is not easy to display this parameter,
      * it will be displayed as a text area, and the JSON string of this parameter will be filled in
@@ -98,7 +98,7 @@ public class ParamBean {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: JSON string corresponding to {@link subParams}
+     * JSON string corresponding to {@link subParams}
      */
     private String subParamsJson;
 

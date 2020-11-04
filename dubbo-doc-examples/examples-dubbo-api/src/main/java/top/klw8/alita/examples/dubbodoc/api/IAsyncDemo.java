@@ -27,14 +27,14 @@ import java.util.concurrent.CompletableFuture;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: IAsyncDemo
- * @Description: asynchronous demo
+ * asynchronous demo
  * @date 2020/3/16 9:30
  */
 public interface IAsyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: request and response parameters are beans
+     * request and response parameters are beans
      * @Date 2020/2/4 0:01
      * @param: param
      * @return top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1
@@ -43,44 +43,44 @@ public interface IAsyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Map without generics
+     * Map without generics
      */
     CompletableFuture<Map> demoApi6();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Map generic with Object
+     * Map generic with Object
      */
     CompletableFuture<Map<Object, Object>> demoApi7();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: List without generics
+     * List without generics
      */
     CompletableFuture<List> demoApi10();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: List generic with Object
+     * List generic with Object
      */
     CompletableFuture<List<Object>> demoApi9();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Object
+     * Object
      */
     CompletableFuture<Object> demoApi8();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Integer
+     * Integer
      */
     CompletableFuture<Integer> demoApi11();
 
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: many generics
+     * many generics
      * @Date 2020/7/30 17:02
      * @param:
      * @return java.util.concurrent.CompletableFuture<java.util.List<java.util.List<java.lang.String>>>

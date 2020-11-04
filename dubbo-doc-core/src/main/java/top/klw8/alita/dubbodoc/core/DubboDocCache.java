@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboDocCache
- * @Description: dubbo doc cache
+ * dubbo doc cache
  * @date 2020/2/29 19:46
  */
 public class DubboDocCache {

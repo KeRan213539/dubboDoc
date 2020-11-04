@@ -27,14 +27,14 @@ import java.util.Map;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: ISyncDemo
- * @Description: synchronization demo
+ * synchronization demo
  * @date 2020/2/2 23:41
  */
 public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: request and response parameters are beans
+     * request and response parameters are beans
      * @Date 2020/2/4 0:01
      * @param: param
      * @return top.klw8.alita.examples.dubbodoc.responses.DemoRespBean1
@@ -43,7 +43,7 @@ public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: request and response parameters are Strings
+     * request and response parameters are Strings
      * @Date 2020/2/4 0:02
      * @param: prarm1
      * @param: prarm2
@@ -53,7 +53,7 @@ public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Without Dubbo doc annotation, no document will be generated
+     * Without Dubbo doc annotation, no document will be generated
      * @Date 2020/2/4 0:22
      * @param: prarm1
      * @return java.lang.String
@@ -62,7 +62,7 @@ public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Nonparametric method with Dubbo doc annotation
+     * Nonparametric method with Dubbo doc annotation
      * @Date 2020/2/4 0:02
      * @param:
      * @return java.lang.String
@@ -71,37 +71,37 @@ public interface ISyncDemo {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Use generics in response
+     * Use generics in response
      */
     BaseResponse<DemoRespBean1> demoApi5();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Map without generics
+     * Map without generics
      */
     Map demoApi6();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Map generic with Object
+     * Map generic with Object
      */
     Map<Object, Object> demoApi7();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: List without generics
+     * List without generics
      */
     List demoApi10();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: List generic with Object
+     * List generic with Object
      */
     List<Object> demoApi9();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Object
+     * Object
      */
     Object demoApi8();
 

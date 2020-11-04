@@ -23,7 +23,7 @@ import lombok.ToString;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: BaseResponse
- * @Description: BaseResponse
+ * BaseResponse
  * @date 2020/3/11 9:27
  */
 @Getter
@@ -33,19 +33,19 @@ public class BaseResponse<T> implements java.io.Serializable {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: response code
+     * response code
      */
     private String code;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: response message
+     * response message
      */
     private String message;
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: response data
+     * response data
      */
     private T data;
 

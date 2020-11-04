@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DemoParamBean1
- * @Description: demo request bean
+ * demo request bean
  * @date 2020/2/2 23:42
  */
 @Getter

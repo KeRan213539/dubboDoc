@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: ClassTypeUtils
- * @Description: Java class tool class, special for Dubbo doc
+ * Java class tool class, special for Dubbo doc
  * @date 2020/2/28 9:30
  */
 @Slf4j
@@ -42,7 +42,7 @@ public class ClassTypeUtils {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: fastjson features
+     * fastjson features
      */
     public static SerializerFeature[] FAST_JSON_FEATURES = {
             //Whether to output the field with null value. The default value is false.
@@ -68,7 +68,7 @@ public class ClassTypeUtils {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Instantiate class and its fields
+     * Instantiate class and its fields
      */
     public static Object initClassTypeWithDefaultValue(Type genericType, Class<?> classType, int processCount) {
         if(processCount >= 10){
@@ -202,7 +202,7 @@ public class ClassTypeUtils {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Check basic data type
+     * Check basic data type
      */
     public static boolean isBaseType(Object o) {
         if (o instanceof java.lang.Integer ||
@@ -224,7 +224,7 @@ public class ClassTypeUtils {
      * @param classz
      * @return
      * @Title: getAllFields
-     * @Description: Get all fields in the class
+     * Get all fields in the class
      */
     public static List<Field> getAllFields(List<Field> fieldList, Class<?> classz) {
         if (classz == null) {

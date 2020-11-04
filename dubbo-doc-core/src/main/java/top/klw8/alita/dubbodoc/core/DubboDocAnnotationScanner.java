@@ -45,7 +45,7 @@ import java.util.*;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboDocAnnotationScanner
- * @Description: Scan and process dubbo doc annotations
+ * Scan and process dubbo doc annotations
  * @date 2020/2/2 18:26
  */
 @Slf4j
@@ -182,7 +182,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: For the attributes in the method parameters, only one layer is processed.
+     * For the attributes in the method parameters, only one layer is processed.
      * The deeper layer is directly converted to JSON, and the deeper layer is up to 5 layers
      */
     private List<ParamBean> processField(Class<?> argClass) {
@@ -222,7 +222,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Determine what HTML form elements to use
+     * Determine what HTML form elements to use
      * @Date 2020/2/28 18:59
      * @param: classType
      * @param: annotation
@@ -309,7 +309,7 @@ public class DubboDocAnnotationScanner implements ApplicationListener<Applicatio
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: export dubbo service for dubbo doc
+     * export dubbo service for dubbo doc
      */
     private <I, T> void exportDubboService(Class<I> serviceClass, T serviceImplInstance, boolean async) {
         ServiceConfig<T> service = new ServiceConfig<>();

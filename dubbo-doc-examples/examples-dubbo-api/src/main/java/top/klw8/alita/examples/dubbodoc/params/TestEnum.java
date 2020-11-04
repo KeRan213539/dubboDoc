@@ -19,7 +19,7 @@ package top.klw8.alita.examples.dubbodoc.params;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: TestEnum
- * @Description: Enumeration for test
+ * Enumeration for test
  * @date 2020/2/28 15:22
  */
 public enum TestEnum {

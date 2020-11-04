@@ -24,7 +24,7 @@ import lombok.Setter;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: CallDubboServiceRequest
- * @Description: Call Dubbo api to request parameters
+ * Call Dubbo api to request parameters
  * @date 2019/9/20 9:12
  */
 @Getter

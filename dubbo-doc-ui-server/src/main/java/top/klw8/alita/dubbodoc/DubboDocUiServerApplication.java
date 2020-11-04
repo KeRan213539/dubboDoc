@@ -24,7 +24,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 /**
  * @author klw
  * @ClassName: DubboDocUiServerApplication
- * @Description: Start Dubbo doc ui server
+ * Start Dubbo doc ui server
  * @date 2019-09-19 17:23:17
  */
 @SpringBootApplication

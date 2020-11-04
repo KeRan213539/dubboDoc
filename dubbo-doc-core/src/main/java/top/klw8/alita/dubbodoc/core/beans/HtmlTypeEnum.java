@@ -19,50 +19,50 @@ package top.klw8.alita.dubbodoc.core.beans;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: HtmlTypeEnum
- * @Description: html type enum
+ * html type enum
  * @date 2020/2/28 17:41
  */
 public enum HtmlTypeEnum {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Textbox
+     * Textbox
      */
     TEXT,
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Textbox, This type will be converted to byte before calling dubbo API
+     * Textbox, This type will be converted to byte before calling dubbo API
      */
     TEXT_BYTE,
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Textbox, will be limited to one character. This type will be converted to char before calling dubbo API
+     * Textbox, will be limited to one character. This type will be converted to char before calling dubbo API
      */
     TEXT_CHAR,
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Numeric input box, integer
+     * Numeric input box, integer
      */
     NUMBER_INTEGER,
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Numeric input box, decimal
+     * Numeric input box, decimal
      */
     NUMBER_DECIMAL,
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Drop down selection box
+     * Drop down selection box
      */
     SELECT,
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: Text area, which is generally used to show the JSON string of the Java Bean contained in the parameter
+     * Text area, which is generally used to show the JSON string of the Java Bean contained in the parameter
      */
     TEXT_AREA,
     ;

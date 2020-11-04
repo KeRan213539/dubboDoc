@@ -25,7 +25,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * @ClassName: CustomLocalDateTimeEditor
- * @Description: LocalDateTime editor for controller
+ * LocalDateTime editor for controller
  * @author klw
  * @date 2020/2/27 18:33
  */

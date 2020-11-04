@@ -23,7 +23,7 @@ import lombok.Setter;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: CallDubboServiceRequestInterfacePrarm
- * @Description: Parameters passed to duboo service api
+ * Parameters passed to duboo service api
  * @date 2019/9/20 15:02
  */
 @Getter

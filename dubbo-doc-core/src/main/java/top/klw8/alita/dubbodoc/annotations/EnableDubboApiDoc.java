@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: EnableDubboApiDoc
- * @Description: Enable dubbo api doc
+ * Enable dubbo api doc
  * @date 2020/2/2 18:21
  */
 @Retention(RetentionPolicy.RUNTIME)

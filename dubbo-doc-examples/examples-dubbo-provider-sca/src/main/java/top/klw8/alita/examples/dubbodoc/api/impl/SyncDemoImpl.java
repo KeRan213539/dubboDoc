@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DemoApiImpl
- * @Description: Synchronous demo implementation
+ * Synchronous demo implementation
  * @date 2020/2/3 2:03
  */
 @Slf4j

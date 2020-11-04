@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: CustomDateEditor
- * @Description: Date editor for controller
+ * Date editor for controller
  * @date 2020/2/27 18:33
  */
 public class CustomDateEditor extends PropertyEditorSupport {
@@ -54,7 +54,7 @@ public class CustomDateEditor extends PropertyEditorSupport {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: String to date adaptation method
+     * String to date adaptation method
      * @Date 2020/4/8 17:31
      * @param: dateStr
      * @return java.util.Date

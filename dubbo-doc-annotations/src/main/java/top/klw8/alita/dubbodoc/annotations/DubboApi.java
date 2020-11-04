@@ -21,7 +21,7 @@ import java.lang.annotation.*;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DubboApi
- * @Description: dubbo api annotation,use to label of api
+ * dubbo api annotation,use to label of api
  * @date 2020/1/31 22:12
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -31,25 +31,25 @@ public @interface DubboApi {
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: api name
+     * api name
      */
     String value();
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: api description(HTML tags available)
+     * api description(HTML tags available)
      */
     String description() default "";
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: api version
+     * api version
      */
     String version() default "";
 
     /**
      * @author klw(213539@qq.com)
-     * @Description: response class description
+     * response class description
      */
     String responseClassDescription() default "";
 

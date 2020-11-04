@@ -25,7 +25,7 @@ import reactor.core.publisher.Mono;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: WebConfig
- * @Description: web config
+ * web config
  * @date 2020/3/24 11:52
  */
 @Component

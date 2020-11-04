@@ -23,7 +23,7 @@ import top.klw8.alita.dubbodoc.annotations.RequestParam;
 /**
  * @author klw(213539 @ qq.com)
  * @ClassName: DemoParamBean1SubBean1
- * @Description: Attribute bean in DemoParamBean1
+ * Attribute bean in DemoParamBean1
  * @date 2020/2/26 16:38
  */
 @Getter
