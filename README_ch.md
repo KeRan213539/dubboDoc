@@ -1,3 +1,7 @@
+# !!!重要提示!!!
+
+> 该项目目前已并入 Dubbo, 请参考: https://dubbo.apache.org/zh/blog/2020/12/22/dubbo-api-docs-apache-dubbo%E6%96%87%E6%A1%A3%E5%B1%95%E7%A4%BA%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/
+
 # dubboDoc
 
 [English](./README.md)
