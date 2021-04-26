@@ -86,7 +86,7 @@
         <nacos-api.version>1.1.4</nacos-api.version>
         <springfox.version>3.0.0-SNAPSHOT</springfox.version>
         <fastjson.version>1.2.73</fastjson.version>
-        <commons-io.version>2.6</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections.version>4.2</commons-collections.version>
         <disruptor.version>3.4.2</disruptor.version>
